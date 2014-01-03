@@ -1,0 +1,140 @@
+"{{{ .vimrc
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
+"
+" Default key mappings
+"
+" Author: Ruslan Osmanov <rrosmanov at gmail dot com>
+" Date: Sat Jan 4 2014
+"}}}
+
+" The default leader is '\', but many people prefer ',' as it's in a standard
+" location. To override this behavior and set it back to '\' (or any other
+" character) add the following to your .vimrc.before.local file:
+"   let g:spf13_leader='\'
+if !exists('g:spf13_leader')
+	let mapleader = ','
+else
+	let mapleader=g:spf13_leader
+endif
+
+" Wrapped lines goes down/up to next row, rather than next line in file.
+noremap j gj
+noremap k gk
+
+" Same for 0, home, end, etc
+function! WrapRelativeMotion(key, ...)
+	let vis_sel=""
+	if a:0
+		let vis_sel="gv"
+	endif
+	if &wrap
+		execute "normal!" vis_sel . "g" . a:key
+	else
+		execute "normal!" vis_sel . a:key
+	endif
+endfunction
+
+" Map g* keys in Normal, Operator-pending, and Visual+select (over written
+" below) modes
+noremap $ :call WrapRelativeMotion("$")<CR>
+noremap <End> :call WrapRelativeMotion("$")<CR>
+noremap 0 :call WrapRelativeMotion("0")<CR>
+noremap <Home> :call WrapRelativeMotion("0")<CR>
+noremap ^ :call WrapRelativeMotion("^")<CR>
+" Over write the Visual+Select mode mappings to ensure correct mode is
+" passed to WrapRelativeMotion
+vnoremap $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
+vnoremap <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
+vnoremap 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
+vnoremap <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
+vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
+
+" The following two lines conflict with moving to top and
+" bottom of the screen
+" If you prefer that functionality, add the following to your
+" .vimrc.before.local file:
+"   let g:spf13_no_fastTabs = 1
+if !exists('g:spf13_no_fastTabs')
+	map <S-H> gT
+	map <S-L> gt
+endif
+
+" Stupid shift key fixes
+if !exists('g:spf13_no_keyfixes')
+	if has("user_commands")
+		command! -bang -nargs=* -complete=file E e<bang> <args>
+		command! -bang -nargs=* -complete=file W w<bang> <args>
+		command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+		command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+		command! -bang Wa wa<bang>
+		command! -bang WA wa<bang>
+		command! -bang Q q<bang>
+		command! -bang QA qa<bang>
+		command! -bang Qa qa<bang>
+	endif
+
+	cmap Tabe tabe
+endif
+
+" Most prefer to toggle search highlighting rather than clear the current
+" search results. To clear search highlighting rather than toggle it on
+" and off, add the following to your .vimrc.before.local file:
+"   let g:spf13_clear_search_highlight = 1
+if exists('g:spf13_clear_search_highlight')
+	nmap <silent> <leader>/ :nohlsearch<CR>
+else
+	nmap <silent> <leader>/ :set invhlsearch<CR>
+endif
+
+
+" Find merge conflict markers
+map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+
+" Shortcuts
+" Change Working Directory to that of the current file
+cmap cwd lcd %:p:h
+cmap cd. lcd %:p:h
+
+" Visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
+
+" Allow using the repeat operator with a visual selection (!)
+" http://stackoverflow.com/a/8064607/127816
+vnoremap . :normal .<CR>
+
+" Fix home and end keybindings for screen, particularly on mac
+" - for some reason this fixes the arrow keys too. huh.
+map [F $
+imap [F $
+map [H g0
+imap [H g0
+
+" For when you forget to sudo.. Really Write the file.
+cmap w!! w !sudo tee % >/dev/null
+
+" Some helpers to edit mode
+" http://vimcasts.org/e/14
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
+
+" Adjust viewports to the same size
+map <Leader>= <C-w>=
+
+" Map <Leader>ff to display all lines with keyword under cursor
+" and ask which one to jump to
+nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
+
+" Easier horizontal scrolling
+map zl zL
+map zh zH
+
+" fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
+map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
+" map Russian keys
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,
+set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<

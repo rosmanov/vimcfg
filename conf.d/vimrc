@@ -1,38 +1,41 @@
-"{ .vimrc
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+"{{{ .vimrc
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
 "
 " A fork of configuration of the spf13 vim distribution <http://vim.spf13.com/#vimrc>.
 "
 " Author: Ruslan Osmanov <rrosmanov at gmail dot com>
 " Date: Sat Jan 4 2014
-"}
+"}}}
 
-" Use before config {
-    if filereadable(expand("~/.vim/conf.d/vimrc.before"))
-        source ~/.vim/conf.d/vimrc.before
+" ~/.vimrc.before {{{
+    if filereadable(expand("~/.vimrc.before"))
+        source ~/.vimrc.before
     endif
-" }
+" }}}
 
-" Environment {
+" Environment {{{
 
-    " Basics {
+    " Basics {{{
         set nocompatible        " Must be first line
         set shell=/bin/bash
-    " }
+    " }}}
 
-    " Setup Bundle Support {
+    " Setup Bundle Support {{{
         " The next three lines ensure that the ~/.vim/bundle/ system works
         filetype on
         filetype off
         set rtp+=~/.vim/bundle/vundle
         call vundle#rc()
-    " }
+    " }}}
 
-" }
+" }}}
 
-source ~/.vim/conf.d/vimrc.bundles
+if !exists('g:spf13_bundles_file')
+    let g:spf13_bundles_file = "~/.vim/conf.d/vimrc.bundles"
+endif
+execute 'source' fnameescape(g:spf13_bundles_file)
 
-" General {
+" General {{{
 
     set background=dark         " Assume a dark background
     filetype plugin indent on   " Automatically detect file types.
@@ -73,7 +76,7 @@ source ~/.vim/conf.d/vimrc.bundles
         augroup END
     endif
 
-    " Setting up the directories {
+    " Setting up the directories {{{
         set backup                  " Backups are nice ...
         if has('persistent_undo')
             set undofile                " So is persistent undo ...
@@ -90,11 +93,11 @@ source ~/.vim/conf.d/vimrc.bundles
                 \ '\[example pattern\]'
                 \ ]
         endif
-    " }
+    " }}}
 
-" }
+" }}}
 
-" Vim UI {
+" Vim UI {{{
 
     " We use csapprox plugin so we can use 256-color scheme in CLI, too
     colorscheme darkspectrum
@@ -141,10 +144,12 @@ source ~/.vim/conf.d/vimrc.bundles
     set scrolloff=3                 " Minimum lines to keep above and below cursor
     set foldenable                  " Auto fold code
     set list listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
-" }
+" }}}
 
-" Formatting {
-
+" Formatting {{{
+if exists('g:spf13_formatting_file')
+    execute 'source' fnameescape(g:spf13_formatting_file)
+else
     set nowrap                      " Do not wrap long lines
     set autoindent                  " Indent at the same level of the previous line
     set shiftwidth=4                " Use indents of 4 spaces
@@ -166,9 +171,10 @@ source ~/.vim/conf.d/vimrc.bundles
     autocmd Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
     au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
-" }
+endif
+" }}}
 
-" cscope"{
+" cscope"{{{
 " We have special crontab entry for ctags:
 " _S3_TAG_FILES=/var/www/s3/spool/tmp/tagfiles
 " 0 11,22 * * * nice -n2 ~/scripts/bash/rebuild_s3_tags.sh
@@ -196,151 +202,23 @@ nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-"}
+"}}}
 
-" Key (re)Mappings {
+" Key (re)Mappings {{{
+if !exists('g:spf13_maps_file')
+    let g:spf13_maps_file = '~/.vim/conf.d/vimrc.maps'
+endif
+execute 'source' fnameescape(g:spf13_maps_file)
+" }}}
 
-    " The default leader is '\', but many people prefer ',' as it's in a standard
-    " location. To override this behavior and set it back to '\' (or any other
-    " character) add the following to your .vimrc.before.local file:
-    "   let g:spf13_leader='\'
-    if !exists('g:spf13_leader')
-        let mapleader = ','
-    else
-        let mapleader=g:spf13_leader
-    endif
+" Plugins {{{
 
-    " Wrapped lines goes down/up to next row, rather than next line in file.
-    noremap j gj
-    noremap k gk
-
-    " Same for 0, home, end, etc
-    function! WrapRelativeMotion(key, ...)
-        let vis_sel=""
-        if a:0
-            let vis_sel="gv"
-        endif
-        if &wrap
-            execute "normal!" vis_sel . "g" . a:key
-        else
-            execute "normal!" vis_sel . a:key
-        endif
-    endfunction
-
-    " Map g* keys in Normal, Operator-pending, and Visual+select (over written
-    " below) modes
-    noremap $ :call WrapRelativeMotion("$")<CR>
-    noremap <End> :call WrapRelativeMotion("$")<CR>
-    noremap 0 :call WrapRelativeMotion("0")<CR>
-    noremap <Home> :call WrapRelativeMotion("0")<CR>
-    noremap ^ :call WrapRelativeMotion("^")<CR>
-    " Over write the Visual+Select mode mappings to ensure correct mode is
-    " passed to WrapRelativeMotion
-    vnoremap $ :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap <End> :<C-U>call WrapRelativeMotion("$", 1)<CR>
-    vnoremap 0 :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap <Home> :<C-U>call WrapRelativeMotion("0", 1)<CR>
-    vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
-
-    " The following two lines conflict with moving to top and
-    " bottom of the screen
-    " If you prefer that functionality, add the following to your
-    " .vimrc.before.local file:
-    "   let g:spf13_no_fastTabs = 1
-    if !exists('g:spf13_no_fastTabs')
-        map <S-H> gT
-        map <S-L> gt
-    endif
-
-    " Stupid shift key fixes
-    if !exists('g:spf13_no_keyfixes')
-        if has("user_commands")
-            command! -bang -nargs=* -complete=file E e<bang> <args>
-            command! -bang -nargs=* -complete=file W w<bang> <args>
-            command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-            command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-            command! -bang Wa wa<bang>
-            command! -bang WA wa<bang>
-            command! -bang Q q<bang>
-            command! -bang QA qa<bang>
-            command! -bang Qa qa<bang>
-        endif
-
-        cmap Tabe tabe
-    endif
-
-    " Most prefer to toggle search highlighting rather than clear the current
-    " search results. To clear search highlighting rather than toggle it on
-    " and off, add the following to your .vimrc.before.local file:
-    "   let g:spf13_clear_search_highlight = 1
-    if exists('g:spf13_clear_search_highlight')
-        nmap <silent> <leader>/ :nohlsearch<CR>
-    else
-        nmap <silent> <leader>/ :set invhlsearch<CR>
-    endif
-
-
-    " Find merge conflict markers
-    map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
-
-    " Shortcuts
-    " Change Working Directory to that of the current file
-    cmap cwd lcd %:p:h
-    cmap cd. lcd %:p:h
-
-    " Visual shifting (does not exit Visual mode)
-    vnoremap < <gv
-    vnoremap > >gv
-
-    " Allow using the repeat operator with a visual selection (!)
-    " http://stackoverflow.com/a/8064607/127816
-    vnoremap . :normal .<CR>
-
-    " Fix home and end keybindings for screen, particularly on mac
-    " - for some reason this fixes the arrow keys too. huh.
-    map [F $
-    imap [F $
-    map [H g0
-    imap [H g0
-
-    " For when you forget to sudo.. Really Write the file.
-    cmap w!! w !sudo tee % >/dev/null
-
-    " Some helpers to edit mode
-    " http://vimcasts.org/e/14
-    cnoremap %% <C-R>=expand('%:h').'/'<cr>
-    map <leader>ew :e %%
-    map <leader>es :sp %%
-    map <leader>ev :vsp %%
-    map <leader>et :tabe %%
-
-    " Adjust viewports to the same size
-    map <Leader>= <C-w>=
-
-    " Map <Leader>ff to display all lines with keyword under cursor
-    " and ask which one to jump to
-    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
-
-    " Easier horizontal scrolling
-    map zl zL
-    map zh zH
-
-    " fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
-    map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
-
-    " map Russian keys
-    set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,
-    set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<
-" }
-
-" Plugins {
-
-    " Misc {
+    " Misc {{{
         let g:NERDShutUp=1
         let b:match_ignorecase = 1
-    " }
+    " }}}
 
-    " OmniComplete {
+    " OmniComplete {{{
         if has("autocmd") && exists("+omnifunc")
             autocmd Filetype *
                 \if &omnifunc == "" |
@@ -363,9 +241,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         " Automatically open and close the popup menu / preview window
         au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
         set completeopt=menu,preview,longest
-    " }
+    " }}}
 
-    " Ctags {
+    " Ctags {{{
         set tags=./tags;/,~/.vimtags
 
         " Make tags placed in .git/tags file available in all levels of a repository
@@ -373,19 +251,19 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         if gitroot != ''
             let &tags = &tags . ',' . gitroot . '/.git/tags'
         endif
-    " }
+    " }}}
 
-    " AutoCloseTag {
+    " AutoCloseTag {{{
         " Make it so AutoCloseTag works for xml and xhtml files as well
         au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
         nmap <Leader>ac <Plug>ToggleAutoCloseMappings
-    " }
+    " }}}
 
-    " SnipMate {
+    " SnipMate {{{
         let g:snips_author = 'Ruslan Osmanov <rrosmanov@gmail.com>'
-    " }
+    " }}}
 
-    " NerdTree {
+    " NerdTree {{{
         map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
         map <leader>e :NERDTreeFind<CR>
         nmap <leader>nt :NERDTreeFind<CR>
@@ -398,9 +276,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         let NERDTreeShowHidden=1
         let NERDTreeKeepTreeInNewTab=1
         let g:nerdtree_tabs_open_on_gui_startup=0
-    " }
+    " }}}
 
-    " Tabularize {
+    " Tabularize {{{
         nmap <Leader>a& :Tabularize /&<CR>
         vmap <Leader>a& :Tabularize /&<CR>
         nmap <Leader>a= :Tabularize /=<CR>
@@ -415,54 +293,19 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         vmap <Leader>a,, :Tabularize /,\zs<CR>
         nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
         vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-    " }
+    " }}}
 
-    " Session List {
-        set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
-        nmap <leader>sl :SessionList<CR>
-        nmap <leader>ss :SessionSave<CR>
-        nmap <leader>sc :SessionClose<CR>
-    " }
-
-    " JSON {
+    " JSON {{{
         nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-    " }
+    " }}}
 
-    " PyMode {
+    " PyMode {{{
         let g:pymode_lint_checker = "pyflakes"
         let g:pymode_utils_whitespaces = 0
         let g:pymode_options = 0
-    " }
+    " }}}
 
-    " ctrlp {
-        let g:ctrlp_working_path_mode = 'ra'
-        nnoremap <silent> <D-t> :CtrlP<CR>
-        nnoremap <silent> <D-r> :CtrlPMRU<CR>
-        let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-            \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
-
-        " On Windows use "dir" as fallback command.
-        if has('win32') || has('win64')
-            let g:ctrlp_user_command = {
-                \ 'types': {
-                    \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-                    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-                \ },
-                \ 'fallback': 'dir %s /-n /b /s /a-d'
-            \ }
-        else
-            let g:ctrlp_user_command = {
-                \ 'types': {
-                    \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
-                    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-                \ },
-                \ 'fallback': 'find %s -type f'
-            \ }
-        endif
-    "}
-
-    " TagBar {
+    " TagBar {{{
         nnoremap <silent> <leader>tt :TagbarToggle<CR>
 
         " If using go please install the gotags program using the following
@@ -479,16 +322,16 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             \ 'ctagsbin'  : 'gotags',
             \ 'ctagsargs' : '-sort -silent'
             \ }
-    "}
+    "}}}
 
-    " PythonMode {
+    " PythonMode {{{
         " Disable if python support not present
         if !has('python')
             let g:pymode = 1
         endif
-    " }
+    " }}}
 
-    " Fugitive {
+    " Fugitive {{{
         nnoremap <silent> <leader>gs :Gstatus<CR>
         nnoremap <silent> <leader>gd :Gdiff<CR>
         nnoremap <silent> <leader>gc :Gcommit<CR>
@@ -499,9 +342,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         nnoremap <silent> <leader>gw :Gwrite<CR>
         nnoremap <silent> <leader>ge :Gedit<CR>
         nnoremap <silent> <leader>gg :SignifyToggle<CR>
-    "}
+    "}}}
 
-    " neocomplete {
+    " neocomplete {{{
         if count(g:spf13_bundle_groups, 'neocomplete')
             let g:acp_enableAtStartup = 0
             let g:neocomplete#enable_at_startup = 1
@@ -529,7 +372,7 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             endif
             let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-            " Plugin key-mappings {
+            " Plugin key-mappings {{{
                 " These two lines conflict with the default digraph mapping of <C-K>
                 " If you prefer that functionality, add the following to your
                 " .vimrc.before.local file:
@@ -555,7 +398,7 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
                 " <C-h>, <BS>: close popup and delete backword char.
                 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
                 inoremap <expr><C-y> neocomplete#close_popup()
-            " }
+            " }}}
 
             " Enable omni completion.
             autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -582,7 +425,7 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 
             " Use honza's snippets.
-            let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+            let g:neosnippet#snippets_directory+='~/.vim/bundle/vim-snippets/snippets'
 
             " Enable neosnippet snipmate compatibility mode
             let g:neosnippet#enable_snipmate_compatibility = 1
@@ -597,9 +440,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             " especially when splits are used.
             set completeopt-=preview
         endif
-    " }
+    " }}}
 
-    " neocomplcache {
+    " neocomplcache {{{
         if count(g:spf13_bundle_groups, 'neocomplcache')
             let g:acp_enableAtStartup = 0
             let g:neocomplcache_enable_at_startup = 1
@@ -629,7 +472,7 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             endif
             let g:neocomplcache_keyword_patterns._ = '\h\w*'
 
-            " Plugin key-mappings {
+            " Plugin key-mappings {{{
                 " These two lines conflict with the default digraph mapping of <C-K>
                 " If you prefer that functionality, add the following to your
                 " .vimrc.before.local file:
@@ -655,7 +498,7 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
                 " <C-h>, <BS>: close popup and delete backword char.
                 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
                 inoremap <expr><C-y> neocomplcache#close_popup()
-            " }
+            " }}}
 
             " Enable omni completion.
             autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -699,15 +542,15 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             " especially when splits are used.
             set completeopt-=preview
         endif
-    " }
+    " }}}
 
-    " UndoTree {
+    " UndoTree {{{
         nnoremap <Leader>u :UndotreeToggle<CR>
         " If undotree is opened, it is likely one wants to interact with it.
         let g:undotree_SetFocusWhenToggle=1
-    " }
+    " }}}
 
-    " indent_guides {
+    " indent_guides {{{
         if !exists('g:spf13_no_indent_guides_autocolor')
             let g:indent_guides_auto_colors = 1
         else
@@ -719,23 +562,23 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         let g:indent_guides_start_level = 2
         let g:indent_guides_guide_size = 1
         let g:indent_guides_enable_on_vim_startup = 1
-    " }
+    " }}}
 
-    " vim-airline {
+    " vim-airline {{{
         let g:airline_theme = 'wombat' " 'solarized' 'powerlineish'
         if !exists('g:airline_powerline_fonts')
             " Use the default set of separators with a few customizations
             let g:airline_left_sep='›'  " Slightly fancier than '>'
             let g:airline_right_sep='‹' " Slightly fancier than '<'
         endif
-    " }
+    " }}}
 
     " Doxygentoolkit
     let g:DoxygenToolkit_authorName="Ruslan Osmanov <rrosmanov at gmail dot com>"
 
-" }
+" }}}
 
-" GUI Settings {
+" GUI Settings {{{
 
     " GVIM- (here instead of .gvimrc)
     if has('gui_running')
@@ -749,11 +592,11 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         "set term=builtin_ansi       " Make arrow and other keys work
     endif
 
-" }
+" }}}
 
-" Functions {
+" Functions {{{
 
-    " UnBundle {
+    " UnBundle {{{
     function! UnBundle(arg, ...)
       let bundle = vundle#config#init_bundle(a:arg, a:000)
       call filter(g:bundles, 'v:val["name_spec"] != "' . a:arg . '"')
@@ -761,9 +604,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
     com! -nargs=+         UnBundle
     \ call UnBundle(<args>)
-    " }
+    " }}}
 
-    " Initialize directories {
+    " Initialize directories {{{
     function! InitializeDirectories()
         let parent = $HOME
         let prefix = 'vim'
@@ -804,9 +647,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         endfor
     endfunction
     call InitializeDirectories()
-    " }
+    " }}}
 
-    " Initialize NERDTree as needed {
+    " Initialize NERDTree as needed {{{
     function! NERDTreeInitAsNeeded()
         redir => bufoutput
         buffers!
@@ -818,9 +661,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
             wincmd l
         endif
     endfunction
-    " }
+    " }}}
 
-    " Strip whitespace {
+    " Strip whitespace {{{
     function! StripTrailingWhitespace()
         " Preparation: save last search, and cursor position.
         let _s=@/
@@ -832,9 +675,9 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
         let @/=_s
         call cursor(l, c)
     endfunction
-    " }
+    " }}}
 
-    " Shell command {
+    " Shell command {{{
     function! s:RunShellCommand(cmdline)
         botright new
 
@@ -855,15 +698,20 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
     command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
     " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
-    " }
+    " }}}
 
-    " PHP files"{
+    " PHP files"{{{
     func! s:FTphp()
         " Poor man's autofolding
         setl noexpandtab fdm=indent foldnestmax=3
         let g:PHP_vintage_case_default_indent = 1
-        "source ~/.vim/php-doc.vim
     endfunc
-    "}
+    "}}}
     "
-" }
+" }}}
+
+" ~/.vimrc.after {{{
+    if filereadable(expand("~/.vimrc.after"))
+        source ~/.vimrc.after
+    endif
+" }}}
