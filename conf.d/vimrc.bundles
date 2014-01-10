@@ -28,7 +28,7 @@ endif
 " }
 
 if !exists('g:spf13_bundle_groups')
-    let g:spf13_bundle_groups=['general', 'neocomplcache', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
+    let g:spf13_bundle_groups=['general', 'neocomplete', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
 endif
 
 "   let g:override_spf13_bundles = 1

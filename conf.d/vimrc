@@ -352,6 +352,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
             let g:neocomplete#enable_auto_delimiter = 1
             let g:neocomplete#max_list = 15
             let g:neocomplete#force_overwrite_completefunc = 1
+            let g:neocomplete#disable_auto_complete = 1
 
             " SuperTab like snippets behavior.
             imap <silent><expr><TAB> neosnippet#expandable() ?
@@ -425,7 +426,8 @@ execute 'source' fnameescape(g:spf13_maps_file)
             let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 
             " Use honza's snippets.
-            let g:neosnippet#snippets_directory+='~/.vim/bundle/vim-snippets/snippets'
+
+            let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
             " Enable neosnippet snipmate compatibility mode
             let g:neosnippet#enable_snipmate_compatibility = 1
@@ -452,6 +454,8 @@ execute 'source' fnameescape(g:spf13_maps_file)
             let g:neocomplcache_enable_auto_delimiter = 1
             let g:neocomplcache_max_list = 15
             let g:neocomplcache_force_overwrite_completefunc = 1
+            let g:neocomplcache_disable_auto_complete = 1
+            let g:neocomplete#sources#syntax#min_keyword_length = 3
 
             " SuperTab like snippets behavior.
             imap <silent><expr><TAB> neosnippet#expandable() ?
@@ -577,6 +581,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
     let g:DoxygenToolkit_authorName="Ruslan Osmanov <rrosmanov at gmail dot com>"
 
 " }}}
+"
 
 " GUI Settings {{{
 
