@@ -53,7 +53,8 @@ if !exists("g:override_spf13_bundles")
     if count(g:spf13_bundle_groups, 'programming')
         Bundle 'tpope/vim-fugitive'
         Bundle 'scrooloose/nerdcommenter'
-        Bundle 'godlygeek/tabular'
+        "Bundle 'godlygeek/tabular'
+        Bundle 'Align'
         if executable('ctags')
             Bundle 'majutsushi/tagbar'
         endif

@@ -151,7 +151,8 @@ if exists('g:spf13_formatting_file')
     execute 'source' fnameescape(g:spf13_formatting_file)
 else
     set nowrap                      " Do not wrap long lines
-    set autoindent                  " Indent at the same level of the previous line
+    set cindent                     " Smarter way to indent in C-like languages
+    set cinoptions=p0t0             " cindent options
     set shiftwidth=4                " Use indents of 4 spaces
     set noexpandtab
     set tabstop=4                   " An indentation every four columns
@@ -278,23 +279,6 @@ execute 'source' fnameescape(g:spf13_maps_file)
         let g:nerdtree_tabs_open_on_gui_startup=0
     " }}}
 
-    " Tabularize {{{
-        nmap <Leader>a& :Tabularize /&<CR>
-        vmap <Leader>a& :Tabularize /&<CR>
-        nmap <Leader>a= :Tabularize /=<CR>
-        vmap <Leader>a= :Tabularize /=<CR>
-        nmap <Leader>a: :Tabularize /:<CR>
-        vmap <Leader>a: :Tabularize /:<CR>
-        nmap <Leader>a:: :Tabularize /:\zs<CR>
-        vmap <Leader>a:: :Tabularize /:\zs<CR>
-        nmap <Leader>a, :Tabularize /,<CR>
-        vmap <Leader>a, :Tabularize /,<CR>
-        nmap <Leader>a,, :Tabularize /,\zs<CR>
-        vmap <Leader>a,, :Tabularize /,\zs<CR>
-        nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-        vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-    " }}}
-
     " JSON {{{
         nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
     " }}}
@@ -306,7 +290,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
     " }}}
 
     " TagBar {{{
-        nnoremap <silent> <leader>tt :TagbarToggle<CR>
+        nnoremap <silent> <localleader>tt :TagbarToggle<CR>
 
         " If using go please install the gotags program using the following
         " go install github.com/jstemmer/gotags
