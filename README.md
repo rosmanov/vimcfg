@@ -21,3 +21,7 @@ you have your bundles up to date (installed, at least):
 	:BundleClean!
 	:BundleInstall
 	:BundleUpdate
+
+## Notes
+
+For `neocomplete` you'll need Vim 7.3.885+ compiled with `if_lua`!

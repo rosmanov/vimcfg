@@ -10,6 +10,6 @@ pre-install:
 install: pre-install
 	cp -R $(SRC_DIRS) $(HOME)/.vim
 	ln -sf .vim/conf.d/vimrc $(HOME)/.vimrc
-	vim -u conf.d/vimrc.bundles -i NONE -V1 -nNes +BundleInstall +qall!
+	vim -u conf.d/vimrc.bundles -i NONE -V1 -nNes +BundleClean! +BundleInstall +BundleUpdate +qall!
 
 .PHONY: pre-install install
