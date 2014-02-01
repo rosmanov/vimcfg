@@ -112,7 +112,7 @@ if !exists("g:override_spf13_bundles")
     " Misc {
     if count(g:spf13_bundle_groups, 'misc')
         Bundle 'tpope/vim-markdown'
-        Bundle 'spf13/vim-preview'
+        "Bundle 'spf13/vim-preview'
         Bundle "DoxygenToolkit.vim"
     endif
     " }
