@@ -1,5 +1,5 @@
 "{{{ .vimrc
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
+" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
 "
 " A fork of configuration of the spf13 vim distribution <http://vim.spf13.com/#vimrc>.
 "
@@ -152,10 +152,10 @@ if exists('g:spf13_formatting_file')
 else
     set nowrap                      " Do not wrap long lines
     set autoindent                  " Use autoindent by default
-    set shiftwidth=4                " Use indents of 4 spaces
-    set noexpandtab
-    set tabstop=4                   " An indentation every four columns
-    set softtabstop=4               " Let backspace delete indent
+    set shiftwidth=2
+    set expandtab
+    set tabstop=2                   " An indentation every four columns
+    set softtabstop=2               " Let backspace delete indent
     set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
     set splitright                  " Puts new vsplit windows to the right of the current
     set splitbelow                  " Puts new split windows to the bottom of the current
@@ -166,7 +166,10 @@ else
     " To disable the stripping of whitespace, add the following to your
     " .vimrc.before.local file:
     "   let g:spf13_keep_trailing_whitespace = 1
-    autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | set cindent cinoptions=p0t0sN-s | endif
+
+    autocmd FileType,BufRead php,javascript,smarty setl noet
+    autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
+    autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
     autocmd BufNewFile,BufRead *.php,*.cphp call s:FTphp()
     autocmd Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
@@ -590,7 +593,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
     " PHP files"{{{
     func! s:FTphp()
         " Poor man's autofolding
-        setl ft=php noexpandtab fdm=indent foldnestmax=3
+        setl ft=php noet fdm=indent foldnestmax=3
         let g:PHP_vintage_case_default_indent = 1
     endfunc
     "}}}
