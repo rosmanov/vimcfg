@@ -167,7 +167,6 @@ else
     " .vimrc.before.local file:
     "   let g:spf13_keep_trailing_whitespace = 1
 
-    autocmd FileType,BufRead php,javascript,smarty setl noet
     autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
     autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
     autocmd BufNewFile,BufRead *.php,*.cphp call s:FTphp()
@@ -593,7 +592,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
     " PHP files"{{{
     func! s:FTphp()
         " Poor man's autofolding
-        setl ft=php noet fdm=indent foldnestmax=3
+        setl ft=php fdm=indent foldnestmax=3
         let g:PHP_vintage_case_default_indent = 1
     endfunc
     "}}}
@@ -601,6 +600,23 @@ execute 'source' fnameescape(g:spf13_maps_file)
 " }}}
 
 " ~/.vimrc.after {{{
+" This is a place to override settings. For instance, you can set different
+" settings depending on current path:
+"
+"    function! SetupProjectEnvironment()
+"    let l:path = expand('%:p')
+"    if l:path =~ '/www/s3/'
+"      if &filetype == 'yaml'
+"        setlocal et ts=2 sw=2 sts=2
+"      else
+"        setlocal noet ts=2 sts=2 sw=2
+"      endif
+"    endif
+"    endfunction
+"    autocmd! BufReadPost,BufNewFile * call SetupProjectEnvironment()
+"
+"    See http://vim.wikia.com/wiki/Project_specific_settings
+
     if filereadable(expand("~/.vimrc.after"))
         source ~/.vimrc.after
     endif
