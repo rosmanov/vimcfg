@@ -168,7 +168,7 @@ else
     "   let g:spf13_keep_trailing_whitespace = 1
 
     autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
-    autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
     autocmd BufNewFile,BufRead *.php,*.cphp call s:FTphp()
     autocmd Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
@@ -216,7 +216,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
 " Plugins {{{
 
     " Misc {{{
-        let g:NERDShutUp=1
+        let g:NERDShutUp = 1
         let b:match_ignorecase = 1
     " }}}
 
@@ -461,8 +461,11 @@ execute 'source' fnameescape(g:spf13_maps_file)
         endif
     " }}}
 
-    " Doxygentoolkit
-    let g:DoxygenToolkit_authorName="Ruslan Osmanov <rrosmanov at gmail dot com>"
+
+    if count(g:spf13_bundle_groups, 'misc')
+      " Doxygentoolkit
+      let g:DoxygenToolkit_authorName = "Ruslan Osmanov <rrosmanov@gmail.com>"
+    endif
 
 " }}}
 "
@@ -565,6 +568,14 @@ execute 'source' fnameescape(g:spf13_maps_file)
         call cursor(l, c)
     endfunction
     " }}}
+
+    "{{{ PostFormatSource()
+    function! PostFormatSource()
+      if !exists('g:spf13_keep_trailing_whitespace')
+        call StripTrailingWhitespace()
+      endif
+    endfunction
+    "}}}
 
     " Shell command {{{
     function! s:RunShellCommand(cmdline)
