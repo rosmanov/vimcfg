@@ -7,10 +7,10 @@
 " Date: Sat Jan 4 2014
 "}}}
 
-" ~/.vimrc.before {{{
-    if filereadable(expand("~/.vimrc.before"))
-        source ~/.vimrc.before
-    endif
+" vimrc.before {{{
+if filereadable(expand("~/.vim/conf.d/vimrc.before"))
+  source ~/.vim/conf.d/vimrc.before
+endif
 " }}}
 
 " Environment {{{
@@ -60,7 +60,7 @@ execute 'source' fnameescape(g:spf13_bundles_file)
 
     " http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
     " Restore cursor to file position in previous editing session
-    " To disable this, add the following to your .vimrc.before.local file:
+    " To disable this, add the following to your vimrc.before file:
     "   let g:spf13_no_restore_cursor = 1
     if !exists('g:spf13_no_restore_cursor')
         function! ResCur()
@@ -84,7 +84,7 @@ execute 'source' fnameescape(g:spf13_bundles_file)
             set undoreload=10000        " Maximum number lines to save for undo on a buffer reload
         endif
 
-        " To disable views add the following to your .vimrc.before.local file:
+        " To disable views add the following to your vimrc.before file:
         "   let g:spf13_no_views = 1
         if !exists('g:spf13_no_views')
             " Add exclusions to mkview and loadview
@@ -164,7 +164,7 @@ else
     "set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
     " Remove trailing whitespaces and ^M chars
     " To disable the stripping of whitespace, add the following to your
-    " .vimrc.before.local file:
+    " vimrc.before file:
     "   let g:spf13_keep_trailing_whitespace = 1
 
     autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
@@ -364,7 +364,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
             " Plugin key-mappings {{{
                 " These two lines conflict with the default digraph mapping of <C-K>
                 " If you prefer that functionality, add the following to your
-                " .vimrc.before.local file:
+                " vimrc.before file:
                 "   let g:spf13_no_neosnippet_expand = 1
                 if !exists('g:spf13_no_neosnippet_expand')
                     imap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -513,7 +513,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
         " To specify a different directory in which to place the vimbackup,
         " vimviews, vimundo, and vimswap files/directories, add the following to
-        " your .vimrc.before.local file:
+        " your vimrc.before file:
         "   let g:spf13_consolidated_directory = <full path to desired directory>
         "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
         if exists('g:spf13_consolidated_directory')
@@ -610,7 +610,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
     "
 " }}}
 
-" ~/.vimrc.after {{{
+" vimrc.after {{{
 " This is a place to override settings. For instance, you can set different
 " settings depending on current path:
 "
@@ -628,7 +628,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
 "
 "    See http://vim.wikia.com/wiki/Project_specific_settings
 
-    if filereadable(expand("~/.vimrc.after"))
-        source ~/.vimrc.after
-    endif
+if filereadable(expand("~/.vim/conf.d/vimrc.after"))
+  source ~/.vim/conf.d/vimrc.after
+endif
 " }}}
