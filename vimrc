@@ -331,12 +331,12 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
     " neocomplete {{{
         if count(g:spf13_bundle_groups, 'neocomplete')
-            let g:acp_enableAtStartup = 0
             let g:neocomplete#enable_at_startup = 1
-            let g:neocomplete#enable_smart_case = 1
-            let g:neocomplete#enable_auto_delimiter = 1
-            let g:neocomplete#max_list = 15
-            let g:neocomplete#force_overwrite_completefunc = 1
+            "let g:neocomplete#enable_smart_case = 1
+            "let g:neocomplete#enable_auto_delimiter = 1
+            "let g:neocomplete#max_list = 15
+            "let g:neocomplete#force_overwrite_completefunc = 1
+            "let g:neocomplete#auto_completion_start_length = 3
 
             " Disable automatic completion for each and every typing.
             " We can use ^X^U to trigger this completion.
@@ -603,7 +603,8 @@ execute 'source' fnameescape(g:spf13_maps_file)
     " PHP files"{{{
     func! s:FTphp()
         " Poor man's autofolding
-        setl ft=php fdm=indent foldnestmax=3
+        " setl fdm=indent foldnestmax=3
+        setl ft=php
         let g:PHP_vintage_case_default_indent = 1
     endfunc
     "}}}

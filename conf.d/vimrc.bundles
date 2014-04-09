@@ -70,10 +70,11 @@ if !exists("g:override_spf13_bundles")
     Bundle 'honza/vim-snippets'
   endif
 
-  "if count(g:spf13_bundle_groups, 'php')
+  if count(g:spf13_bundle_groups, 'php')
   " Bundle 'spf13/PIV'
-  " Bundle 'arnaud-lb/vim-php-namespace'
-  "endif
+    "Bundle 'arnaud-lb/vim-php-namespace'
+    Bundle 'rayburgemeestre/phpfolding.vim'
+  endif
 
   if count(g:spf13_bundle_groups, 'python')
     " Pick either python-mode or pyflakes & pydoc
