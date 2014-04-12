@@ -169,7 +169,7 @@ else
 
     autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
     autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
-    autocmd BufNewFile,BufRead *.php,*.cphp call s:FTphp()
+    autocmd BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
     autocmd Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
     au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
