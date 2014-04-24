@@ -167,12 +167,13 @@ else
     " vimrc.before file:
     "   let g:spf13_keep_trailing_whitespace = 1
 
-    autocmd FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
-    autocmd FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
-    autocmd BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
-    autocmd Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
+    au FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
+    au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
+    au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
+    au Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
     au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
+    au FileType,BufRead smarty setl ft=smarty.html
 endif
 " }}}
 
