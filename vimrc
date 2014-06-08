@@ -100,7 +100,11 @@ execute 'source' fnameescape(g:spf13_bundles_file)
 " Vim UI {{{
 
     " We use csapprox plugin so we can use 256-color scheme in CLI, too
-    colorscheme darkspectrum
+    if &term != 'linux'
+      colorscheme darkspectrum
+    else
+      colorscheme desert
+    endif
 
     set tabpagemax=15               " Only show 15 tabs
     set showmode                    " Display the current mode
@@ -481,6 +485,8 @@ execute 'source' fnameescape(g:spf13_maps_file)
     else
         if &term == 'xterm' || &term == 'screen'
             set t_Co=256            " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+        elseif &term == 'linux'
+          set t_Co=8
         endif
         "set term=builtin_ansi       " Make arrow and other keys work
     endif
