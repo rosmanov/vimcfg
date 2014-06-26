@@ -2,3 +2,4 @@ bundle/*
 !.keep
 conf.d/vimrc.before
 conf.d/vimrc.after
+*~
