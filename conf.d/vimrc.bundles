@@ -111,6 +111,12 @@ if !exists("g:override_spf13_bundles")
     endfor
   endif
 
+  if exists("g:spf13_bundle_custom")
+    for b in g:spf13_bundle_custom
+      Bundle string(b)
+    endfor
+  endif
+
 endif
 " }
 
