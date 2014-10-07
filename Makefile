@@ -8,7 +8,7 @@ pre-install:
 	for f in $(HOME)/.vimrc $(HOME)/.vim; do \
 		[ -e "$f" ] && mv -f "$f" "$f."$(BACKUP_SUFFIX); \
 	done; \
-	if [ ! -d $(VUNDLE_DIR) ]; then git clone https://github.com/gmarik/vundle.git $(VUNDLE_DIR); fi
+	git clone https://github.com/gmarik/vundle.git $(VUNDLE_DIR)
 
 install: pre-install $(DOT_VIM_SRC)
 	cp -R $(DOT_VIM_SRC) $(HOME)/.vim

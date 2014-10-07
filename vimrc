@@ -345,7 +345,7 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
             " Disable automatic completion for each and every typing.
             " We can use ^X^U to trigger this completion.
-            let g:neocomplete#disable_auto_complete = 1
+            let g:neocomplete#disable_auto_complete = 0
 
             " SuperTab like snippets behavior.
             imap <silent><expr><TAB> neosnippet#expandable() ?
