@@ -1,0 +1,10 @@
+#!/bin/bash -
+source config
+
+if [ ! -d "${VIM_DIR}" ]; then
+  echo >&2 "${VIM_DIR} doesn't exist! Running install..."
+  ./install
+fi
+
+cd "${VIM_DIR}"
+vim -u "${VIMRC_BUNDLES_CONF}" -i NONE -V1 -nNes +PluginClean! +PluginInstall +qall!
