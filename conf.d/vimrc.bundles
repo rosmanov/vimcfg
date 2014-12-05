@@ -99,7 +99,7 @@ if !exists("g:override_spf13_bundles")
   if count(g:spf13_bundle_groups, 'misc')
     Plugin 'tpope/vim-markdown'
     "Plugin 'spf13/vim-preview'
-    Plugin "DoxygenToolkit.vim"
+    Plugin 'DoxygenToolkit.vim'
     " vim-notes depends on vim-misc
     Plugin 'xolox/vim-misc'
     Plugin 'xolox/vim-notes'
