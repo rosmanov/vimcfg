@@ -174,6 +174,7 @@ else
     au FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
     au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
     au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
+    au FileType java set ts=4 sts=4 sw=4
     au Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
     " Format XML with F2
     au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
@@ -345,7 +346,8 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
             " Disable automatic completion for each and every typing.
             " We can use ^X^U to trigger this completion.
-            let g:neocomplete#disable_auto_complete = 0
+            let g:neocomplete#disable_auto_complete = 1
+            inoremap <expr> <C-x>u  neocomplete#start_manual_complete()
 
             " SuperTab like snippets behavior.
             imap <silent><expr><TAB> neosnippet#expandable() ?

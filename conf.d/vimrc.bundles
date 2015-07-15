@@ -55,6 +55,7 @@ if !exists("g:override_spf13_bundles")
     if executable('ctags')
       Plugin 'majutsushi/tagbar'
     endif
+    Plugin 'terryma/vim-multiple-cursors'
   endif
 
   if count(g:spf13_bundle_groups, 'snipmate')
@@ -67,6 +68,7 @@ if !exists("g:override_spf13_bundles")
   elseif count(g:spf13_bundle_groups, 'neocomplete')
     Plugin 'Shougo/neocomplete.vim.git'
     Plugin 'Shougo/neosnippet'
+    Plugin 'Shougo/neosnippet-snippets'
     Plugin 'honza/vim-snippets'
   endif
 
