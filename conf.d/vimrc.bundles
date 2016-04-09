@@ -46,6 +46,7 @@ if !exists("g:override_spf13_bundles")
     Plugin 'jistr/vim-nerdtree-tabs'
     Plugin 'flazz/vim-colorschemes'
     Plugin 'nathanaelkane/vim-indent-guides'
+    Plugin 'Shougo/vimproc.vim'
   endif
 
   if count(g:spf13_bundle_groups, 'programming')
