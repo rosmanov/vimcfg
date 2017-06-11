@@ -183,33 +183,9 @@ endif
 " }}}
 
 " cscope"{{{
-" We have special crontab entry for ctags:
-" _S3_TAG_FILES=/var/www/s3/spool/tmp/tagfiles
-" 0 11,22 * * * nice -n2 ~/scripts/bash/rebuild_s3_tags.sh
-if has("cscope")
-    set csprg=/usr/bin/cscope
-    set csto=0
-    "set cst
-    set nocsverb
-    " add any database in current directory
-    if filereadable("cscope.out")
-        cs add cscope.out
-        " else add database pointed to by environment
-    elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
-    endif
-    set csverb
+if v:version < 600
+  execute 'source' expand('%:p:h') . "/plugin/cscope_maps.vim"
 endif
-map <C-_> :cstag <C-R>=expand("<cword>")<CR><CR>
-map g<C-\> :cs find 0 <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "}}}
 
 " Key (re)Mappings {{{
@@ -611,10 +587,10 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
     " PHP files"{{{
     func! s:FTphp()
-        " Poor man's autofolding
-        " setl fdm=indent foldnestmax=3
-        setl ft=php
-        let g:PHP_vintage_case_default_indent = 1
+      setl ft=php
+      " PSR
+      setl ts=4 sts=4 sw=4
+      let g:PHP_vintage_case_default_indent = 1
     endfunc
     "}}}
     "
