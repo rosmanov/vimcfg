@@ -182,12 +182,6 @@ else
 endif
 " }}}
 
-" cscope"{{{
-if v:version < 600
-  execute 'source' expand('%:p:h') . "/plugin/cscope_maps.vim"
-endif
-"}}}
-
 " Key (re)Mappings {{{
 if !exists('g:spf13_maps_file')
     let g:spf13_maps_file = '~/.vim/conf.d/vimrc.maps'
@@ -591,10 +585,22 @@ execute 'source' fnameescape(g:spf13_maps_file)
       " PSR
       setl ts=4 sts=4 sw=4
       let g:PHP_vintage_case_default_indent = 1
+
+      if count(g:spf13_bundle_groups, 'php')
+        inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
+        noremap <Leader>u :call PhpInsertUse()<CR>
+      endif
+    endfunc
+
+    " Inserts "use" statement for namespace of the class under cursor
+    " using php-namespace plugin
+    func! IPhpInsertUse()
+      call PhpInsertUse()
+      call feedkeys('a',  'n')
     endfunc
     "}}}
-    "
-" }}}
+
+    " }}}
 
 " vimrc.after {{{
 " This is a place to override settings. For instance, you can set different

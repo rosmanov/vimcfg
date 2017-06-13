@@ -84,6 +84,7 @@ if !exists("g:override_spf13_bundles")
     Plugin 'joonty/vdebug'
     " Completion daemon
     Plugin 'lvht/phpcd.vim'
+    Plugin 'arnaud-lb/vim-php-namespace'
   endif
 
   if count(g:spf13_bundle_groups, 'python')

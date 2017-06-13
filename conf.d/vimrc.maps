@@ -138,3 +138,8 @@ map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscr
 " map Russian keys
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,
 set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<
+
+" cscope
+if v:version < 600
+  execute 'source' expand('%:p:h:h') . "/plugin/cscope_maps.vim"
+endif
