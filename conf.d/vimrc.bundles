@@ -91,6 +91,10 @@ if !exists("g:override_spf13_bundles")
     Plugin 'arnaud-lb/vim-php-namespace'
   endif
 
+  if count(g:spf13_bundle_groups, 'ruby')
+    Plugin 'vim-ruby/vim-ruby'
+  endif
+
   if count(g:spf13_bundle_groups, 'python')
     " Pick either python-mode or pyflakes & pydoc
     Plugin 'klen/python-mode'
