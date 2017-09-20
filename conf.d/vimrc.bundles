@@ -29,7 +29,7 @@ endif
 
 if !exists('g:spf13_bundle_groups')
   "let g:spf13_bundle_groups=['general', 'neocomplete', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
-  let g:spf13_bundle_groups=['general', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
+  let g:spf13_bundle_groups=['general', 'programming', 'php', 'python', 'javascript', 'html', 'misc', 'syntax']
 endif
 
 "   let g:override_spf13_bundles = 1
@@ -48,6 +48,10 @@ if !exists("g:override_spf13_bundles")
     Plugin 'flazz/vim-colorschemes'
     Plugin 'nathanaelkane/vim-indent-guides'
     Plugin 'Shougo/vimproc.vim'
+  endif
+
+  if count(g:spf13_bundle_groups, 'syntax')
+    Plugin 'vim-syntastic/syntastic'
   endif
 
   if count(g:spf13_bundle_groups, 'programming')

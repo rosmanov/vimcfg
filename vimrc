@@ -372,6 +372,9 @@ execute 'source' fnameescape(g:spf13_maps_file)
             autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
             autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
             autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+            autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
+            autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+            autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
             " Haskell post write lint and check with ghcmod
             " $ `cabal install ghcmod` if missing and ensure
@@ -438,6 +441,16 @@ execute 'source' fnameescape(g:spf13_maps_file)
         endif
     " }}}
 
+    if count(g:spf13_bundle_groups, 'syntax')
+      set statusline+=%#warningmsg#
+      set statusline+=%{SyntasticStatuslineFlag()}
+      set statusline+=%*
+
+      let g:syntastic_always_populate_loc_list = 1
+      let g:syntastic_auto_loc_list = 1
+      let g:syntastic_check_on_open = 1
+      let g:syntastic_check_on_wq = 0
+    endif
 
     if count(g:spf13_bundle_groups, 'misc')
       " Doxygentoolkit
@@ -585,6 +598,9 @@ execute 'source' fnameescape(g:spf13_maps_file)
       " PSR
       setl ts=4 sts=4 sw=4
       let g:PHP_vintage_case_default_indent = 1
+
+      let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+      let g:syntastic_php_phpcs_args='--standard=PSR2 -n'
 
       if count(g:spf13_bundle_groups, 'php')
         inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
