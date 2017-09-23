@@ -3,3 +3,6 @@ bundle/*
 conf.d/vimrc.before
 conf.d/vimrc.after
 *~
+.netrwhist
+plugged
+autoload

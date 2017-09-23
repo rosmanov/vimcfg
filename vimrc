@@ -20,14 +20,8 @@ endif
         set shell=/bin/bash
     " }}}
 
-    " Setup Bundle Support {{{
-        " The next three lines ensure that the ~/.vim/bundle/ system works
-        filetype on
-        filetype off
-        set rtp+=~/.vim/bundle/vundle
-        call vundle#rc()
-    " }}}
-
+    " Initialize vim-plug
+    call plug#begin('~/.vim/plugged')
 " }}}
 
 if !exists('g:spf13_bundles_file')
@@ -442,14 +436,16 @@ execute 'source' fnameescape(g:spf13_maps_file)
     " }}}
 
     if count(g:spf13_bundle_groups, 'syntax')
-      set statusline+=%#warningmsg#
-      set statusline+=%{SyntasticStatuslineFlag()}
-      set statusline+=%*
+      if exists('g:loaded_syntastic_plugin')
+        set statusline+=%#warningmsg#
+        set statusline+=%{SyntasticStatuslineFlag()}
+        set statusline+=%*
 
-      let g:syntastic_always_populate_loc_list = 1
-      let g:syntastic_auto_loc_list = 1
-      let g:syntastic_check_on_open = 1
-      let g:syntastic_check_on_wq = 0
+        let g:syntastic_always_populate_loc_list = 0
+        let g:syntastic_auto_loc_list = 1
+        let g:syntastic_check_on_open = 0
+        let g:syntastic_check_on_wq = 0
+      endif
     endif
 
     if count(g:spf13_bundle_groups, 'misc')
@@ -479,59 +475,6 @@ execute 'source' fnameescape(g:spf13_maps_file)
 " }}}
 
 " Functions {{{
-
-    " UnBundle {{{
-    function! UnBundle(arg, ...)
-      let bundle = vundle#config#init_bundle(a:arg, a:000)
-      call filter(g:bundles, 'v:val["name_spec"] != "' . a:arg . '"')
-    endfunction
-
-    com! -nargs=+         UnBundle
-    \ call UnBundle(<args>)
-    " }}}
-
-    " Initialize directories {{{
-    function! InitializeDirectories()
-        let parent = $HOME
-        let prefix = 'vim'
-        let dir_list = {
-                    \ 'backup': 'backupdir',
-                    \ 'views': 'viewdir',
-                    \ 'swap': 'directory' }
-
-        if has('persistent_undo')
-            let dir_list['undo'] = 'undodir'
-        endif
-
-        " To specify a different directory in which to place the vimbackup,
-        " vimviews, vimundo, and vimswap files/directories, add the following to
-        " your vimrc.before file:
-        "   let g:spf13_consolidated_directory = <full path to desired directory>
-        "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
-        if exists('g:spf13_consolidated_directory')
-            let common_dir = g:spf13_consolidated_directory . prefix
-        else
-            let common_dir = parent . '/.' . prefix
-        endif
-
-        for [dirname, settingname] in items(dir_list)
-            let directory = common_dir . dirname . '/'
-            if exists("*mkdir")
-                if !isdirectory(directory)
-                    call mkdir(directory)
-                endif
-            endif
-            if !isdirectory(directory)
-                echo "Warning: Unable to create backup directory: " . directory
-                echo "Try: mkdir -p " . directory
-            else
-                let directory = substitute(directory, " ", "\\\\ ", "g")
-                exec "set " . settingname . "=" . directory
-            endif
-        endfor
-    endfunction
-    call InitializeDirectories()
-    " }}}
 
     " Initialize NERDTree as needed {{{
     function! NERDTreeInitAsNeeded()
@@ -599,8 +542,15 @@ execute 'source' fnameescape(g:spf13_maps_file)
       setl ts=4 sts=4 sw=4
       let g:PHP_vintage_case_default_indent = 1
 
-      let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-      let g:syntastic_php_phpcs_args='--standard=PSR2 -n'
+      if exists('g:loaded_ale')
+        let g:ale_php_phpcs_standard='PSR2'
+        let g:ale_php_phpcs_executable='phpcs -n'
+        let g:ale_linters = { 'php': [ 'php -l', 'phpcs', 'phpmd' ] }
+        let g:ale_php_phpcs_use_global = 1
+      elseif exists('g:loaded_syntastic_plugin')
+        let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+        let g:syntastic_php_phpcs_args='--standard=PSR2 -n'
+      endif
 
       if count(g:spf13_bundle_groups, 'php')
         inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>

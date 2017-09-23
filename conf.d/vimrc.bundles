@@ -3,27 +3,20 @@
 set nocompatible        " Must be first line
 set background=dark
 
-" Setup Plugin Support {
-" The next three lines ensure that the ~/.vim/bundle/ system works
-filetype off
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
-" }
-
 " Plugins {
 
 " Deps {
-Plugin 'gmarik/vundle'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-"Plugin 'tomtom/tlib_vim'
+"Plug 'gmarik/vundle'
+Plug 'MarcWeber/vim-addon-mw-utils'
+"Plug 'tomtom/tlib_vim'
 if executable('ag')
-  Plugin 'mileszs/ack.vim'
+  Plug 'mileszs/ack.vim'
   let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
 elseif executable('ack-grep')
   let g:ackprg="ack-grep -H --nocolor --nogroup --column"
-  Plugin 'mileszs/ack.vim'
+  Plug 'mileszs/ack.vim'
 elseif executable('ack')
-  Plugin 'mileszs/ack.vim'
+  Plug 'mileszs/ack.vim'
 endif
 " }
 
@@ -36,103 +29,104 @@ endif
 if !exists("g:override_spf13_bundles")
 
   if count(g:spf13_bundle_groups, 'general')
-    Plugin 'scrooloose/nerdtree'
-    Plugin 'spf13/vim-colors'
-    Plugin 'tpope/vim-surround'
-    Plugin 'matchit.zip'
-    Plugin 'vim-airline/vim-airline'
-    Plugin 'vim-airline/vim-airline-themes'
-    Plugin 'bufexplorer.zip'
-    Plugin 'godlygeek/csapprox'
-    Plugin 'jistr/vim-nerdtree-tabs'
-    Plugin 'flazz/vim-colorschemes'
-    Plugin 'nathanaelkane/vim-indent-guides'
-    Plugin 'Shougo/vimproc.vim'
+    Plug 'scrooloose/nerdtree'
+    Plug 'spf13/vim-colors'
+    Plug 'tpope/vim-surround'
+    Plug 'tmhedberg/matchit'
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    Plug 'jlanzarotta/bufexplorer'
+    Plug 'godlygeek/csapprox'
+    Plug 'jistr/vim-nerdtree-tabs'
+    Plug 'flazz/vim-colorschemes'
+    Plug 'nathanaelkane/vim-indent-guides'
+    Plug 'Shougo/vimproc.vim'
   endif
 
   if count(g:spf13_bundle_groups, 'syntax')
-    Plugin 'vim-syntastic/syntastic'
+    "Plug 'vim-syntastic/syntastic'
+    Plug 'w0rp/ale'
   endif
 
   if count(g:spf13_bundle_groups, 'programming')
-    Plugin 'tpope/vim-fugitive'
-    Plugin 'scrooloose/nerdcommenter'
-    "Plugin 'godlygeek/tabular'
-    Plugin 'Align'
+    Plug 'tpope/vim-fugitive'
+    Plug 'scrooloose/nerdcommenter'
+    Plug 'vim-scripts/Align'
     if executable('ctags')
-      Plugin 'majutsushi/tagbar'
+      Plug 'majutsushi/tagbar'
     endif
-    Plugin 'terryma/vim-multiple-cursors'
+    Plug 'terryma/vim-multiple-cursors'
   endif
 
   if count(g:spf13_bundle_groups, 'snipmate')
-    Plugin 'garbas/vim-snipmate'
-    Plugin 'honza/vim-snippets'
+    Plug 'garbas/vim-snipmate'
+    Plug 'honza/vim-snippets'
     " Source support_function.vim to support vim-snippets.
     if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
       source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
     endif
   elseif count(g:spf13_bundle_groups, 'neocomplete')
-    Plugin 'Shougo/neocomplete.vim.git'
-    Plugin 'Shougo/neosnippet'
-    Plugin 'Shougo/neosnippet-snippets'
-    Plugin 'honza/vim-snippets'
+    Plug 'Shougo/neocomplete.vim'
+    Plug 'Shougo/neosnippet'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'honza/vim-snippets'
   endif
 
   if count(g:spf13_bundle_groups, 'php')
-  " Plugin 'spf13/PIV'
-    "Plugin 'arnaud-lb/vim-php-namespace'
+  " Plug 'spf13/PIV'
+    "Plug 'arnaud-lb/vim-php-namespace'
     " Improved automatic folding based on syntax
-    Plugin 'rayburgemeestre/phpfolding.vim'
+    Plug 'rayburgemeestre/phpfolding.vim'
     " Debugger
-    Plugin 'joonty/vdebug'
+    Plug 'joonty/vdebug'
     " Completion daemon
-    Plugin 'lvht/phpcd.vim'
-    Plugin 'arnaud-lb/vim-php-namespace'
+    Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+    Plug 'arnaud-lb/vim-php-namespace'
   endif
 
   if count(g:spf13_bundle_groups, 'ruby')
-    Plugin 'vim-ruby/vim-ruby'
+    Plug 'vim-ruby/vim-ruby'
+    Plug 'tpope/vim-rails'
   endif
 
   if count(g:spf13_bundle_groups, 'python')
     " Pick either python-mode or pyflakes & pydoc
-    Plugin 'klen/python-mode'
-    " Plugin 'python.vim'
-    " Plugin 'python_match.vim'
-    " Plugin 'pythoncomplete'
+    Plug 'klen/python-mode'
+    " Plug 'python.vim'
+    " Plug 'python_match.vim'
+    " Plug 'pythoncomplete'
   endif
 
   if count(g:spf13_bundle_groups, 'javascript')
-    Plugin 'elzr/vim-json'
-    Plugin 'groenewege/vim-less'
-    Plugin 'pangloss/vim-javascript'
-    Plugin 'briancollins/vim-jst'
+    Plug 'elzr/vim-json'
+    Plug 'groenewege/vim-less'
+    Plug 'pangloss/vim-javascript'
+    Plug 'briancollins/vim-jst'
   endif
 
   if count(g:spf13_bundle_groups, 'html')
-    " Plugin 'amirh/HTML-AutoCloseTag'
-    Plugin 'hail2u/vim-css3-syntax'
+    " Plug 'amirh/HTML-AutoCloseTag'
+    Plug 'hail2u/vim-css3-syntax'
   endif
 
   if count(g:spf13_bundle_groups, 'misc')
-    Plugin 'tpope/vim-markdown'
-    "Plugin 'spf13/vim-preview'
-    Plugin 'DoxygenToolkit.vim'
+    Plug 'tpope/vim-markdown'
+    "Plug 'spf13/vim-preview'
+    Plug 'vim-scripts/DoxygenToolkit.vim'
     " vim-notes depends on vim-misc
-    Plugin 'xolox/vim-misc'
-    Plugin 'xolox/vim-notes'
+    Plug 'xolox/vim-misc'
+    Plug 'xolox/vim-notes'
   endif
 
   if exists("g:spf13_bundle_syntax")
     for b in g:spf13_bundle_syntax
-      Plugin string(b)
+      Plug b
     endfor
   endif
 
   if exists("g:spf13_bundle_custom")
     for b in g:spf13_bundle_custom
-      Plugin string(b)
+      Plug b
     endfor
   endif
 
@@ -143,3 +137,6 @@ endif
   " set autowrite                  " automatically write a file when leaving a modified buffer
   set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
   " }
+
+" vim-plug initialization end
+call plug#end()
