@@ -50,7 +50,10 @@ execute 'source' fnameescape(g:spf13_bundles_file)
 
     " Instead of reverting the cursor to the last position in the buffer, we
     " set it to the first line when editing a git commit message
-    au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+    augroup GitCommitFileType
+      au!
+      au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+    augroup end
 
     " http://vim.wikia.com/wiki/Restore_cursor_to_file_position_in_previous_editing_session
     " Restore cursor to file position in previous editing session
@@ -165,14 +168,35 @@ else
     " vimrc.before file:
     "   let g:spf13_keep_trailing_whitespace = 1
 
-    au FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
-    au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
-    au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
-    au FileType java set ts=4 sts=4 sw=4
-    au Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
-    " Format XML with F2
-    au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
-    au FileType,BufRead smarty setl ft=smarty.html
+    augroup FormatSource
+      au!
+      au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
+    augroup end
+    augroup CFileType
+      au!
+      au FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
+    augroup end
+    augroup PhpFiletype
+      au!
+      au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
+    augroup end
+    augroup JavaFiletype
+      au!
+      au FileType java set ts=4 sts=4 sw=4
+    augroup end
+    augroup ChangelogFiletype
+      au!
+      au Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
+    augroup end
+    augroup XmlFiletype
+      au!
+      " Format XML with F2
+      au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
+    augroup end
+    augroup SmartyFiletype
+      au!
+      au FileType,BufRead smarty setl ft=smarty.html
+    augroup end
 endif
 " }}}
 
@@ -189,6 +213,32 @@ execute 'source' fnameescape(g:spf13_maps_file)
         let g:NERDShutUp = 1
         let b:match_ignorecase = 1
     " }}}
+
+    " Deoplete
+    let g:deoplete#enable_at_startup = 1
+    " deoplete tab-complete
+    inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+    "{{{ neosnippet
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " SuperTab like snippets behavior.
+    " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    "imap <expr><TAB>
+    " \ pumvisible() ? "\<C-n>" :
+    " \ neosnippet#expandable_or_jumpable() ?
+    " \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+          \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    " For conceal markers.
+    if has('conceal')
+      set conceallevel=2 concealcursor=niv
+    endif
+    "}}}
 
     " OmniComplete {{{
         if has("autocmd") && exists("+omnifunc")
@@ -210,9 +260,12 @@ execute 'source' fnameescape(g:spf13_maps_file)
         inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
         inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
-        " Automatically open and close the popup menu / preview window
-        au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-        set completeopt=menu,preview,longest
+        augroup OmniCompleteCursor
+          au!
+          " Automatically open and close the popup menu / preview window
+          au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+          set completeopt=menu,preview,longest
+        augroup end
     " }}}
 
     " Ctags {{{
@@ -227,7 +280,9 @@ execute 'source' fnameescape(g:spf13_maps_file)
 
     " AutoCloseTag {{{
         " Make it so AutoCloseTag works for xml and xhtml files as well
-        au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+        augroup XmlFiletype
+          au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+        augroup end
         nmap <Leader>ac <Plug>ToggleAutoCloseMappings
     " }}}
 
@@ -298,113 +353,6 @@ execute 'source' fnameescape(g:spf13_maps_file)
         nnoremap <silent> <leader>ge :Gedit<CR>
         nnoremap <silent> <leader>gg :SignifyToggle<CR>
     "}}}
-
-    " neocomplete {{{
-        if count(g:spf13_bundle_groups, 'neocomplete')
-            let g:neocomplete#enable_at_startup = 0
-            "let g:neocomplete#enable_smart_case = 1
-            "let g:neocomplete#enable_auto_delimiter = 1
-            "let g:neocomplete#max_list = 15
-            "let g:neocomplete#force_overwrite_completefunc = 1
-            "let g:neocomplete#auto_completion_start_length = 3
-
-            " Disable automatic completion for each and every typing.
-            " We can use ^X^U to trigger this completion.
-            let g:neocomplete#disable_auto_complete = 1
-            inoremap <expr> <C-x>u  neocomplete#start_manual_complete()
-
-            " SuperTab like snippets behavior.
-            imap <silent><expr><TAB> neosnippet#expandable() ?
-                        \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
-                        \ "\<C-e>" : "\<TAB>")
-            smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
-
-            " Define dictionary.
-            let g:neocomplete#sources#dictionary#dictionaries = {
-                        \ 'default' : '',
-                        \ 'vimshell' : $HOME.'/.vimshell_hist',
-                        \ 'scheme' : $HOME.'/.gosh_completions'
-                        \ }
-
-            " Define keyword.
-            if !exists('g:neocomplete#keyword_patterns')
-                let g:neocomplete#keyword_patterns = {}
-            endif
-            let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-            " Plugin key-mappings {{{
-                " These two lines conflict with the default digraph mapping of <C-K>
-                " If you prefer that functionality, add the following to your
-                " vimrc.before file:
-                "   let g:spf13_no_neosnippet_expand = 1
-                if !exists('g:spf13_no_neosnippet_expand')
-                    imap <C-k> <Plug>(neosnippet_expand_or_jump)
-                    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-                endif
-
-                inoremap <expr><C-g> neocomplete#undo_completion()
-                inoremap <expr><C-l> neocomplete#complete_common_string()
-                inoremap <expr><CR> neocomplete#complete_common_string()
-
-                " <TAB>: completion.
-                inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-                inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-
-                " <CR>: close popup
-                " <s-CR>: close popup and save indent.
-                inoremap <expr><s-CR> pumvisible() ? neocomplete#close_popup()"\<CR>" : "\<CR>"
-                inoremap <expr><CR> pumvisible() ? neocomplete#close_popup() : "\<CR>"
-
-                " <C-h>, <BS>: close popup and delete backword char.
-                inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-                inoremap <expr><C-y> neocomplete#close_popup()
-            " }}}
-
-            " Enable omni completion.
-            autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-            autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-            autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-            autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-            autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-            autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-            autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-            autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-
-            " Haskell post write lint and check with ghcmod
-            " $ `cabal install ghcmod` if missing and ensure
-            " ~/.cabal/bin is in your $PATH.
-            if !executable("ghcmod")
-                autocmd BufWritePost *.hs GhcModCheckAndLintAsync
-            endif
-
-            " Enable heavy omni completion.
-            if !exists('g:neocomplete#sources#omni#input_patterns')
-                let g:neocomplete#sources#omni#input_patterns = {}
-            endif
-            let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-            let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-            let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-            let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-            let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-
-            " Use honza's snippets.
-
-            let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-
-            " Enable neosnippet snipmate compatibility mode
-            let g:neosnippet#enable_snipmate_compatibility = 1
-
-            " For snippet_complete marker.
-            if has('conceal')
-                set conceallevel=2 concealcursor=i
-            endif
-
-            " Disable the neosnippet preview candidate window
-            " When enabled, there can be too much visual noise
-            " especially when splits are used.
-            set completeopt-=preview
-        endif
-    " }}}
 
     " UndoTree {{{
         nnoremap <Leader>u :UndotreeToggle<CR>
@@ -543,19 +491,34 @@ execute 'source' fnameescape(g:spf13_maps_file)
       let g:PHP_vintage_case_default_indent = 1
 
       if exists('g:loaded_ale')
-        let g:ale_php_phpcs_standard='PSR2'
-        let g:ale_php_phpcs_executable='phpcs -n'
-        let g:ale_linters = { 'php': [ 'php -l', 'phpcs', 'phpmd' ] }
-        let g:ale_php_phpcs_use_global = 1
+        let g:ale_linters = { 'php': [ 'php', 'phpcs', 'phpmd', 'phpstan' ] }
+        let g:ale_php_phpcs_executable = expand('~/.vim/tools/phpcs.sh')
+        let g:ale_php_phpstan_executable = expand('~/.vim/tools/phpstan.sh')
+        let g:ale_php_phpcs_standard = 'PSR2'
       elseif exists('g:loaded_syntastic_plugin')
-        let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-        let g:syntastic_php_phpcs_args='--standard=PSR2 -n'
+        let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd', 'phpstan']
+        let g:syntastic_php_phpcs_args = '--standard=PSR2 -n'
       endif
 
       if count(g:spf13_bundle_groups, 'php')
         inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
         noremap <Leader>u :call PhpInsertUse()<CR>
       endif
+
+      let delimitMate_matchpairs = "(:),[:],{:}"
+      let b:delimitMate_matchpairs = delimitMate_matchpairs
+
+      "if exists('g:phpactorPhpBin')
+        "setlocal omnifunc=phpactor#Complete
+      "endif
+    endfunc
+
+    func! s:FThaskell()
+      set tabstop=8                   "A tab is 8 spaces
+      set expandtab                   "Always uses spaces instead of tabs
+      set softtabstop=4               "Insert 4 spaces when tab is pressed
+      set shiftwidth=4                "An indent is 4 spaces
+      set shiftround                  "Round indent to nearest shiftwidth multiple
     endfunc
 
     " Inserts "use" statement for namespace of the class under cursor

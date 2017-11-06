@@ -7,4 +7,4 @@ if [ ! -d "${VIM_DIR}" ]; then
 fi
 
 cd "${VIM_DIR}"
-vim -u "${VIMRC_BUNDLES_CONF}" -i NONE -V1 -nNes +PluginClean! +PluginInstall +qall!
+vim -u "${VIMRC_BUNDLES_CONF}" -i NONE -V1 -nNes +PlugClean! +PlugInstall +qall!

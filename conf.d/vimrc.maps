@@ -4,7 +4,6 @@
 " Default key mappings
 "
 " Author: Ruslan Osmanov <rrosmanov at gmail dot com>
-" Date: Sat Jan 4 2014
 "}}}
 
 " The default leader is '\', but many people prefer ',' as it's in a standard
@@ -12,10 +11,14 @@
 " character) add the following to your .vimrc.before.local file:
 "   let g:spf13_leader='\'
 if !exists('g:spf13_leader')
-	let mapleader = ','
+  let mapleader = ','
 else
-	let mapleader=g:spf13_leader
+  let mapleader=g:spf13_leader
 endif
+
+" Better 'Escape'
+inoremap jk <esc>
+inoremap <esc> <nop>
 
 " Wrapped lines goes down/up to next row, rather than next line in file.
 noremap j gj
@@ -23,15 +26,15 @@ noremap k gk
 
 " Same for 0, home, end, etc
 function! WrapRelativeMotion(key, ...)
-	let vis_sel=""
-	if a:0
-		let vis_sel="gv"
-	endif
-	if &wrap
-		execute "normal!" vis_sel . "g" . a:key
-	else
-		execute "normal!" vis_sel . a:key
-	endif
+  let vis_sel=""
+  if a:0
+    let vis_sel="gv"
+  endif
+  if &wrap
+    execute "normal!" vis_sel . "g" . a:key
+  else
+    execute "normal!" vis_sel . a:key
+  endif
 endfunction
 
 " Map g* keys in Normal, Operator-pending, and Visual+select (over written
@@ -55,25 +58,25 @@ vnoremap ^ :<C-U>call WrapRelativeMotion("^", 1)<CR>
 " .vimrc.before.local file:
 "   let g:spf13_no_fastTabs = 1
 if !exists('g:spf13_no_fastTabs')
-	map <S-H> gT
-	map <S-L> gt
+  map <S-H> gT
+  map <S-L> gt
 endif
 
 " Stupid shift key fixes
 if !exists('g:spf13_no_keyfixes')
-	if has("user_commands")
-		command! -bang -nargs=* -complete=file E e<bang> <args>
-		command! -bang -nargs=* -complete=file W w<bang> <args>
-		command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-		command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-		command! -bang Wa wa<bang>
-		command! -bang WA wa<bang>
-		command! -bang Q q<bang>
-		command! -bang QA qa<bang>
-		command! -bang Qa qa<bang>
-	endif
+  if has("user_commands")
+    command! -bang -nargs=* -complete=file E e<bang> <args>
+    command! -bang -nargs=* -complete=file W w<bang> <args>
+    command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+    command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+    command! -bang Wa wa<bang>
+    command! -bang WA wa<bang>
+    command! -bang Q q<bang>
+    command! -bang QA qa<bang>
+    command! -bang Qa qa<bang>
+  endif
 
-	cmap Tabe tabe
+  cmap Tabe tabe
 endif
 
 " Most prefer to toggle search highlighting rather than clear the current
@@ -81,11 +84,10 @@ endif
 " and off, add the following to your .vimrc.before.local file:
 "   let g:spf13_clear_search_highlight = 1
 if exists('g:spf13_clear_search_highlight')
-	nmap <silent> <leader>/ :nohlsearch<CR>
+  nmap <silent> <leader>/ :nohlsearch<CR>
 else
-	nmap <silent> <leader>/ :set invhlsearch<CR>
+  nmap <silent> <leader>/ :set invhlsearch<CR>
 endif
-
 
 " Find merge conflict markers
 map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
@@ -143,3 +145,5 @@ set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<
 if v:version < 600
   execute 'source' expand('%:p:h:h') . "/plugin/cscope_maps.vim"
 endif
+
+" vim: ts=2 sts=2 sw=2

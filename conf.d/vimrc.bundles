@@ -1,14 +1,19 @@
 " vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
 
-set nocompatible        " Must be first line
+set nocompatible " Must be the first line
 set background=dark
+
+" Generates a condition for Plug function
+function! PlugCond(cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
 
 " Plugins {
 
 " Deps {
-"Plug 'gmarik/vundle'
 Plug 'MarcWeber/vim-addon-mw-utils'
-"Plug 'tomtom/tlib_vim'
 if executable('ag')
   Plug 'mileszs/ack.vim'
   let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
@@ -21,13 +26,10 @@ endif
 " }
 
 if !exists('g:spf13_bundle_groups')
-  "let g:spf13_bundle_groups=['general', 'neocomplete', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
-  let g:spf13_bundle_groups=['general', 'programming', 'php', 'python', 'javascript', 'html', 'misc', 'syntax']
+  let g:spf13_bundle_groups=['general', 'php', 'javascript', 'html', 'misc', 'syntax']
 endif
 
-"   let g:override_spf13_bundles = 1
 if !exists("g:override_spf13_bundles")
-
   if count(g:spf13_bundle_groups, 'general')
     Plug 'scrooloose/nerdtree'
     Plug 'spf13/vim-colors'
@@ -44,44 +46,49 @@ if !exists("g:override_spf13_bundles")
   endif
 
   if count(g:spf13_bundle_groups, 'syntax')
-    "Plug 'vim-syntastic/syntastic'
+    " ALE plugin is better than `syntastic` because of its asynchronous features
     Plug 'w0rp/ale'
+    "Plug 'vim-syntastic/syntastic'
   endif
 
-  if count(g:spf13_bundle_groups, 'programming')
-    Plug 'tpope/vim-fugitive'
-    Plug 'scrooloose/nerdcommenter'
-    Plug 'vim-scripts/Align'
-    if executable('ctags')
-      Plug 'majutsushi/tagbar'
-    endif
-    Plug 'terryma/vim-multiple-cursors'
+  Plug 'tpope/vim-fugitive'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'vim-scripts/Align'
+  Plug 'Raimondi/delimitMate'
+  if executable('ctags')
+    Plug 'majutsushi/tagbar'
+  endif
+  Plug 'terryma/vim-multiple-cursors'
+
+  " General completion and snippets
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
   endif
 
-  if count(g:spf13_bundle_groups, 'snipmate')
-    Plug 'garbas/vim-snipmate'
-    Plug 'honza/vim-snippets'
-    " Source support_function.vim to support vim-snippets.
-    if filereadable(expand("~/.vim/bundle/vim-snippets/snippets/support_functions.vim"))
-      source ~/.vim/bundle/vim-snippets/snippets/support_functions.vim
-    endif
-  elseif count(g:spf13_bundle_groups, 'neocomplete')
-    Plug 'Shougo/neocomplete.vim'
-    Plug 'Shougo/neosnippet'
-    Plug 'Shougo/neosnippet-snippets'
-    Plug 'honza/vim-snippets'
-  endif
+  Plug 'Shougo/neosnippet'
+  Plug 'Shougo/neosnippet-snippets'
+  Plug 'honza/vim-snippets'
 
   if count(g:spf13_bundle_groups, 'php')
-  " Plug 'spf13/PIV'
-    "Plug 'arnaud-lb/vim-php-namespace'
     " Improved automatic folding based on syntax
     Plug 'rayburgemeestre/phpfolding.vim'
+
     " Debugger
     Plug 'joonty/vdebug'
+    Plug 'arnaud-lb/vim-php-namespace'
+
+    " PHP completion and introspection
     " Completion daemon
     Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-    Plug 'arnaud-lb/vim-php-namespace'
+    " Required for roxma/ncm-phpactor'
+    Plug 'roxma/nvim-completion-manager', PlugCond(has('nvim'))
+    Plug 'phpactor/phpactor' ,  {'do': 'composer install'}
+    " NeoVim integration for phpactor
+    Plug 'roxma/ncm-phpactor', PlugCond(has('nvim'))
   endif
 
   if count(g:spf13_bundle_groups, 'ruby')

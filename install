@@ -5,7 +5,4 @@ for f in "${HOME}/.vimrc" "${VIM_DIR}"; do
   [ -e "$f" ] && mv -f "$f" "${f}.${BACKUP_SUFFIX}";
 done
 
-git clone --no-hardlinks . "${VIM_DIR}"
-git clone https://github.com/gmarik/vundle.git "${VUNDLE_DIR}"
-
-vim -u "${VIMRC_BUNDLES_CONF}" -i NONE -V1 -nNes +PluginClean! +PluginInstall +PluginUpdate +qall!
+vim -u "${VIMRC_BUNDLES_CONF}" -i NONE -V1 -nNes +PlugClean! +PlugInstall +PlugUpdate +qall!
