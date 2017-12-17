@@ -1,0 +1,4 @@
+PlugClean!
+PlugInstall
+PlugUpdate
+qa!
