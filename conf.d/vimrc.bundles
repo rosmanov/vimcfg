@@ -12,10 +12,8 @@ endfunction
 
 " Plugins {
 
-" Deps {
-"Plug 'gmarik/vundle'
+" Dependencies {
 Plug 'MarcWeber/vim-addon-mw-utils'
-"Plug 'tomtom/tlib_vim'
 if executable('ag')
   Plug 'mileszs/ack.vim'
   let g:ackprg = 'ag --nogroup --nocolor --column --smart-case'
@@ -28,7 +26,6 @@ endif
 " }
 
 if !exists('g:my_bundle_groups')
-  "let g:my_bundle_groups=['general', 'neocomplete', 'programming', 'php', 'python', 'javascript', 'html', 'misc']
   let g:my_bundle_groups=['general', 'programming', 'php', 'python', 'javascript', 'html', 'misc', 'syntax']
 endif
 
@@ -124,7 +121,6 @@ if !exists("g:override_my_bundles")
 
   if count(g:my_bundle_groups, 'misc')
     Plug 'tpope/vim-markdown'
-    "Plug 'spf13/vim-preview'
     Plug 'vim-scripts/DoxygenToolkit.vim'
     " vim-notes depends on vim-misc
     Plug 'xolox/vim-misc'
@@ -146,10 +142,7 @@ if !exists("g:override_my_bundles")
 endif
 " }
 
-  " General {
-  " set autowrite                  " automatically write a file when leaving a modified buffer
-  set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
-  " }
+set shortmess+=filmnrxoOtT      " Avoids 'hit enter'
 
 " vim-plug initialization end
 call plug#end()
