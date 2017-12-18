@@ -55,6 +55,7 @@ if !exists("g:override_my_bundles")
   endif
 
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb' " For :Gbrowse on GitHub
   Plug 'scrooloose/nerdcommenter'
   Plug 'vim-scripts/Align'
   Plug 'Raimondi/delimitMate'
