@@ -6,3 +6,4 @@ conf.d/vimrc.after
 .netrwhist
 plugged
 autoload
+spell/*
