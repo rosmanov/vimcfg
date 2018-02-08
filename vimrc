@@ -187,6 +187,7 @@ let b:match_ignorecase = 1
 
 "{{{ Deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
 let g:deoplete#omni#input_patterns = {}
 let g:deoplete#omni#input_patterns.ruby = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
@@ -224,13 +225,16 @@ let g:notes_directories = ["~/.vim-notes"]
 ""}}}
 
 "{{{ neosnippet
+" Remap the default combination <C-k> which is used to enter digraphs
+inoremap <C-y> <C-k>
+
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
-
 " SuperTab like snippets behavior.
 " Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+
 "imap <expr><TAB>
 " \ pumvisible() ? "\<C-n>" :
 " \ neosnippet#expandable_or_jumpable() ?
@@ -272,7 +276,7 @@ augroup OmniCompleteCursor
   au!
   " Automatically open and close the popup menu / preview window
   au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-  set completeopt+=menu,preview,longest
+  set completeopt+=menu,preview
 augroup end
 " }}}
 
