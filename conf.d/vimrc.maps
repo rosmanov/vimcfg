@@ -1,11 +1,5 @@
-"{{{ .vimrc
-" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
-"
-" Default key mappings
-"
-" Author: Ruslan Osmanov <rrosmanov at gmail dot com>
-" Date: Sat Jan 4 2014
-"}}}
+" Global key mappings.
+" Filetype-specific mappings can be found in the `~/.vim/ftplugin` directory.
 
 " The default leader is '\', but many people prefer ',' as it's in a standard
 " location. To override this behavior and set it back to '\' (or any other
@@ -17,9 +11,11 @@ else
     let mapleader=g:my_leader
 endif
 
-" Wrapped lines goes down/up to next row, rather than next line in file.
-noremap j gj
-noremap k gk
+if !exists('g:my_localleader')
+    let maplocalleader = '_'
+else
+    let maplocalleader=g:my_localleader
+endif
 
 " Same for 0, home, end, etc
 function! WrapRelativeMotion(key, ...)
@@ -86,7 +82,7 @@ else
     nmap <silent> <leader>/ :set invhlsearch<CR>
 endif
 
-" Better 'Escape'
+" Use jk instead of 'Escape'
 inoremap jk <esc>
 inoremap <esc> <nop>
 
@@ -146,3 +142,38 @@ set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<
 if v:version < 600
     execute 'source' expand('%:p:h:h') . "/plugin/cscope_maps.vim"
 endif
+
+" NERDTree plugin
+map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
+map <leader>e :NERDTreeFind<CR>
+
+" TagBar plugin
+nnoremap <silent> <localleader>tt :TagbarToggle<CR>
+
+"{{{ Completion
+" TAB Completion
+" Use <Tab> instead of <C-n>, if completion menu is visible.
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" Use <S-Tab> instead of <C-P>, if completion menu is visible.
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+inoremap <c-c> <ESC>
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+" Completion }}}
+
+" Fugitive plugin
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
+nnoremap <silent> <leader>gp :Git push<CR>
+nnoremap <silent> <leader>gr :Gread<CR>
+nnoremap <silent> <leader>gw :Gwrite<CR>
+nnoremap <silent> <leader>ge :Gedit<CR>
+nnoremap <silent> <leader>gg :SignifyToggle<CR>
+
+" vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:

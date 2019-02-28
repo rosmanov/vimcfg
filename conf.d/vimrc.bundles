@@ -66,13 +66,13 @@ if !exists("g:override_my_bundles")
   Plug 'terryma/vim-multiple-cursors'
 
   " General completion and snippets
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
+  Plug 'ncm2/ncm2'
+
+  "Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugin' }
+
+  " Remote plugin framework for deoplete and ncm2
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc', PlugCond(!has('nvim'))
 
   Plug 'Shougo/neosnippet'
   Plug 'Shougo/neosnippet-snippets'
@@ -87,13 +87,17 @@ if !exists("g:override_my_bundles")
     Plug 'arnaud-lb/vim-php-namespace'
 
     " PHP completion and introspection
-    " Completion daemon
-    Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-    " Required for roxma/ncm-phpactor'
-    Plug 'roxma/nvim-completion-manager', PlugCond(has('nvim'))
-    Plug 'phpactor/phpactor' ,  {'do': 'composer install'}
-    " NeoVim integration for phpactor
+    Plug 'phpactor/phpactor', { 'do': 'composer install', 'for': 'php' }
     Plug 'roxma/ncm-phpactor', PlugCond(has('nvim'))
+
+    Plug 'phpactor/ncm2-phpactor'
+    "Plug 'ncm2/ncm2-bufword'
+    "Plug 'ncm2/ncm2-path'
+
+    "Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+
+    " Multi-entry selection UI
+    Plug 'junegunn/fzf'
   endif
 
   if count(g:my_bundle_groups, 'ruby')
@@ -123,7 +127,6 @@ if !exists("g:override_my_bundles")
 
   if count(g:my_bundle_groups, 'misc')
     Plug 'tpope/vim-markdown'
-    Plug 'vim-scripts/DoxygenToolkit.vim'
     " vim-notes depends on vim-misc
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-notes'

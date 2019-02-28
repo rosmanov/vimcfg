@@ -1,12 +1,6 @@
-" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
-"
-" Author: Ruslan Osmanov <rrosmanov at gmail dot com>
-
-" {{{ vimrc.before
 if filereadable(expand("~/.vim/conf.d/vimrc.before"))
   source ~/.vim/conf.d/vimrc.before
 endif
-" }}}
 
 set nocompatible " Must be the first line
 set shell=/bin/bash
@@ -19,8 +13,7 @@ if !exists('g:my_bundles_file')
 endif
 execute 'source' fnameescape(g:my_bundles_file)
 
-" General {{{
-
+" {{{ General
 set background=dark         " Assume a dark background
 filetype plugin indent on   " Automatically detect file types.
 syntax on                   " Syntax highlighting
@@ -68,20 +61,29 @@ endif
 " {{{ Directories
 set backup
 if has('persistent_undo')
-  set undofile         " So is persistent undo ...
+  set undofile         " Enable 'undo' persistence
   set undolevels=1000  " Maximum number of changes that can be undone
   set undoreload=10000 " Maximum number lines to save for undo on a buffer reload
 endif
 " }}}
-" }}}
+" General }}}
 
 " Vim UI {{{
 
-" We use csapprox plugin so we can use 256-color scheme in CLI, too
+" csapprox plugin enables 256-color scheme in command line interface
 if &term != 'linux'
   colorscheme darkspectrum
 else
   colorscheme desert
+endif
+
+if !has('gui_running')
+  if &term == 'xterm' || &term == 'screen'
+    " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
+    set t_Co=256
+  elseif &term == 'linux'
+    set t_Co=8
+  endif
 endif
 
 " Fix highlight
@@ -95,15 +97,15 @@ set showmode      " Display the current mode
 
 if has('cmdline_info')
   set noruler
-  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
-  set showcmd " Show partial commands in status line and
-  " Selected characters/lines in visual mode
+  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
+  " Show partial commands in status line and
+  " selected characters/lines in visual mode
+  set showcmd
 endif
 
 if has('statusline')
-  set laststatus=2
+  set laststatus=2 " Always show status line
 
-  " Broken down into easily includeable segments
   set statusline=%<%f\                     " Filename
   set statusline+=%w%h%m%r                 " Options
   set statusline+=%{fugitive#statusline()} " Git Hotness
@@ -112,9 +114,9 @@ if has('statusline')
   set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
 endif
 
-set backspace=indent,eol,start  " Backspace for dummies
-set linespace=0                 " No extra spaces between rows
-set nu                          " Line numbers on
+set backspace=indent,eol,start
+set linespace=0
+set nonumber                    " Line numbers off
 set showmatch                   " Show matching brackets/parenthesis
 set incsearch                   " Find as you type search
 set hlsearch                    " Highlight search terms
@@ -132,15 +134,15 @@ set list listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic 
 
 " {{{ Formatting
 set nowrap            " Do not wrap long lines
-set autoindent        " Use autoindent by default
+set autoindent
 set shiftwidth=2
 set expandtab
-set tabstop=2         " An indentation every four columns
-set softtabstop=2     " Let backspace delete indent
+set tabstop=2
+set softtabstop=2
 set nojoinspaces      " Prevents inserting two spaces after punctuation on a join (J)
 set splitright        " Puts new vsplit windows to the right of the current
 set splitbelow        " Puts new split windows to the bottom of the current
-set pastetoggle=<F12> " pastetoggle (sane indentation on pastes)
+set pastetoggle=<F12> " Key to enable sane indentation on pastes
 augroup FormatSource
   au!
   au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
@@ -161,18 +163,13 @@ augroup ChangelogFiletype
   au!
   au Filetype changelog let g:changelog_username="Ruslan Osmanov <rrosmanov@gmail.com>"
 augroup end
-augroup XmlFiletype
-  au!
-  " Format XML with F2
-  au Filetype xml map <F2> <Esc>:1,$!xmllint --format -<CR>
-augroup end
 augroup SmartyFiletype
   au!
   au FileType,BufRead smarty setl ft=smarty.html
 augroup end
 " }}}
 
-" {{{ Key mappings 
+" {{{ Key mappings
 if !exists('g:my_maps_file')
   let g:my_maps_file = '~/.vim/conf.d/vimrc.maps'
 endif
@@ -181,48 +178,11 @@ execute 'source' fnameescape(g:my_maps_file)
 
 " Plugins {{{
 
-" {{{ Matchit
+" Matchit
 let b:match_ignorecase = 1
-" }}}
 
-"{{{ Deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.ruby = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
-let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
-
-" Enable deoplete when InsertEnter.
-let g:deoplete#enable_at_startup = 0
-augroup Deoplete
-  autocmd!
-  autocmd InsertEnter * call deoplete#enable()
-augroup END
-
-set completeopt+=noinsert
-
-" TAB completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ deoplete#mappings#manual_complete()
-function! s:check_back_space() abort "{{{
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction "}}}
-
-" Workaround for vim-multiple-cursors plugin
-function g:Multiple_cursors_before()
-  let g:deoplete#disable_auto_complete = 1
-endfunction
-function g:Multiple_cursors_after()
-  let g:deoplete#disable_auto_complete = 0
-endfunction
-"}}}
-
-"{{{ vim-notes
+" vim-notes
 let g:notes_directories = ["~/.vim-notes"]
-""}}}
 
 "{{{ neosnippet
 " Remap the default combination <C-k> which is used to enter digraphs
@@ -231,75 +191,26 @@ inoremap <C-y> <C-k>
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
 " For conceal markers.
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 "}}}
 
-" {{{ syntaxcomplete
-if has("autocmd") && exists("+omnifunc")
-  augroup OmniComplete
-    autocmd!
-  autocmd Filetype *
-        \if &omnifunc == "" |
-        \setlocal omnifunc=syntaxcomplete#Complete |
-        \endif
-  augroup END
-endif
-
-hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
-hi PmenuSbar  guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermbg=lightgray cterm=NONE
-hi PmenuThumb  guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermbg=darkcyan cterm=NONE
-
-" Some convenient mappings
-inoremap <expr> <Esc>  pumvisible() ? "\<C-e>"                  : "\<Esc>"
-inoremap <expr> <CR>   pumvisible() ? "\<C-y>"                  : "\<CR>"
-inoremap <expr> <Down> pumvisible() ? "\<C-n>"                  : "\<Down>"
-inoremap <expr> <Up>   pumvisible() ? "\<C-p>"                  : "\<Up>"
-inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>\<C-p>\<C-n>"   : "\<C-u>"
-
-" Automatically open and close the popup menu / preview window
-augroup OmniCompleteCursor
-  au!
-  " Automatically open and close the popup menu / preview window
-  au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-  set completeopt+=menu,preview
-augroup end
-" }}}
-
-" {{{ Ctags
+" {{{ CTags and CScope
 set tags=./tags;/,~/.vimtags
+" Disable "Added cscope database" message on startup
+set nocscopeverbose
 
-" Make tags placed in .git/tags file available in all levels of a repository
+" Make tags from .git/tags file available in all levels of a repository
 let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
 if gitroot != ''
   let &tags = &tags . ',' . gitroot . '/.git/tags'
 endif
-" Make tags placed in .git/tags file available in all levels of a repository
-let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-if gitroot != ''
-    let &tags = &tags . ',' . gitroot . '/tags'
-endif
 " }}}
 
 " {{{ NERDTree
-map <C-e> :NERDTreeToggle<CR>:NERDTreeMirror<CR>
-map <leader>e :NERDTreeFind<CR>
-nmap <leader>nt :NERDTreeFind<CR>
-
 let NERDTreeShowBookmarks=1
 let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
 let NERDTreeChDirMode=0
@@ -310,20 +221,16 @@ let NERDTreeKeepTreeInNewTab=1
 let g:nerdtree_tabs_open_on_gui_startup=0
 " }}}
 
-" {{{ JSON
-" Formatting
-nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
-" }}}
-
 " {{{ PyMode
 let g:pymode_lint_checker = "pyflakes"
 let g:pymode_utils_whitespaces = 0
 let g:pymode_options = 0
+if !has('python')
+  let g:pymode = 1
+endif
 " }}}
 
 " {{{ TagBar
-nnoremap <silent> <localleader>tt :TagbarToggle<CR>
-
 " If using go please install the gotags program using the following
 " go install github.com/jstemmer/gotags
 " And make sure gotags is in your path
@@ -340,28 +247,9 @@ let g:tagbar_type_go = {
       \ }
 "}}}
 
-" {{{ PythonMode
-if !has('python')
-  let g:pymode = 1
-endif
-" }}}
-
-" {{{ Fugitive
-nnoremap <silent> <leader>gs :Gstatus<CR>
-nnoremap <silent> <leader>gd :Gdiff<CR>
-nnoremap <silent> <leader>gc :Gcommit<CR>
-nnoremap <silent> <leader>gb :Gblame<CR>
-nnoremap <silent> <leader>gl :Glog<CR>
-nnoremap <silent> <leader>gp :Git push<CR>
-nnoremap <silent> <leader>gr :Gread<CR>
-nnoremap <silent> <leader>gw :Gwrite<CR>
-nnoremap <silent> <leader>ge :Gedit<CR>
-nnoremap <silent> <leader>gg :SignifyToggle<CR>
-"}}}
-
 " {{{ indent_guides
 
-" For some colorschemes, autocolor will not work (eg: 'desert', 'ir_black')
+" For some colorschemes, autocolor will not work (e.g: 'desert', 'ir_black')
 augroup IndentGuides
   autocmd!
   let g:indent_guides_auto_colors = 0
@@ -386,86 +274,55 @@ if exists('g:loaded_ale')
 endif
 " }}}
 
-if count(g:my_bundle_groups, 'syntax')
-  if exists('g:loaded_syntastic_plugin')
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
+"{{{ NCM2 (completion manager)
+augroup NCM2
+  au!
+  autocmd BufEnter * call ncm2#enable_for_buffer()
+  " enable auto complete for `<backspace>`, `<c-w>` keys.
+  " known issue https://github.com/ncm2/ncm2/issues/7
+  au TextChangedI * call ncm2#auto_trigger()
+  " We shouldn't use 'longest' in completeopt. We also should set 'noinsert'
+  set completeopt=noinsert,menuone,noselect
+  " Suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+  " found' messages
+  set shortmess+=c
+  let g:ncm2#complete_delay = 60
+  let g:ncm2#popup_delay = 60
+  let g:ncm2#popup_limit = 10
+augroup end
+"}}}
 
-    let g:syntastic_always_populate_loc_list = 0
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 0
-    let g:syntastic_check_on_wq = 0
+" Plugins END }}}
 
-    " Fix Syntastic colors
-    au BufEnter <buffer> hi SyntasticErrorSign term=standout ctermfg=203 ctermbg=234 guifg=#E5786D guibg=#242424
-  endif
-endif
-
-if count(g:my_bundle_groups, 'misc')
-  if exists('g:my_author')
-    let g:DoxygenToolkit_authorName = g:my_author
-  endif
-endif
-" }}}
-
-
-" GUI Settings {{{
-
-" Gvim
-if has('gui_running')
-  set guioptions-=T           " Remove the toolbar
-  set lines=40                " 40 lines of text instead of 24
-  set guifont=Monospace\ 11,Andale\ Mono\ Regular\ 11,Menlo\ Regular\ 11,Consolas\ Regular\ 11,Courier\ New\ Regular\ 11
-else
-  if &term == 'xterm' || &term == 'screen'
-    set t_Co=256            " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
-  elseif &term == 'linux'
-    set t_Co=8
-  endif
-endif
-" }}}
+"{{{ Plugin fixes
+" 'notes' plugin sets completeopt+=longest globally, which badly affects to
+" the ncm2 completion badly.
+au FileType,BufRead notes set completeopt-=longest
+"}}}
 
 " {{{ Functions
 
-" Initialize NERDTree as needed {{{
-function! NERDTreeInitAsNeeded()
-  redir => bufoutput
-  buffers!
-  redir END
-  let idx = stridx(bufoutput, "NERD_tree")
-  if idx > -1
-    NERDTreeMirror
-    NERDTreeFind
-    wincmd l
-  endif
-endfunction
-" }}}
-
-" Strip whitespace {{{
-function! StripTrailingWhitespace()
-  " Preparation: save last search, and cursor position.
-  let _s=@/
+function! StripTrailingWhitespace() " {{{
+  " Save last search, and cursor position.
+  let _s = @/
   let l = line(".")
   let c = col(".")
-  " do the business:
+
   %s/\s\+$//e
-  " clean up: restore previous search history, and cursor position
+
   let @/=_s
   call cursor(l, c)
 endfunction
 " }}}
 
-"{{{ PostFormatSource()
-function! PostFormatSource()
+function! PostFormatSource() "{{{
   if !exists('g:my_keep_trailing_whitespace')
     call StripTrailingWhitespace()
   endif
 endfunction
 "}}}
 
-" Shell command {{{
-function! s:RunShellCommand(cmdline)
+function! s:RunShellCommand(cmdline) " {{{
   botright new
 
   setlocal buftype=nofile
@@ -487,14 +344,14 @@ command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
 " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
 " }}}
 
-" {{{ PHP files
-func! s:FTphp()
+function! s:FTphp() " {{{
   setl ft=php
-  " PSR
+  " PSR-2
   setl ts=4 sts=4 sw=4
 
-  let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-  let g:deoplete#ignore_sources.php = ['omni']
+  "setl completefunc=phpactor#Complete
+  setlocal omnifunc=phpactor#Complete
+  let g:phpactorOmniError = v:false
 
   let g:PHP_vintage_case_default_indent = 1
 
@@ -502,63 +359,26 @@ func! s:FTphp()
     let g:ale_php_phpcs_executable = expand('~/.vim/tools/phpcs.sh')
     let g:ale_php_phpstan_executable = expand('~/.vim/tools/phpstan.sh')
     let g:ale_php_phpcs_standard = 'PSR2'
-  elseif exists('g:loaded_syntastic_plugin')
-    let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd', 'phpstan']
-    let g:syntastic_php_phpcs_args = '--standard=PSR2 -n'
-  endif
-
-  if count(g:my_bundle_groups, 'php')
-    inoremap <Leader>u <Esc>:call IPhpInsertUse()<CR>
-    noremap <Leader>u :call PhpInsertUse()<CR>
   endif
 
   let delimitMate_matchpairs = "(:),[:],{:}"
   let b:delimitMate_matchpairs = delimitMate_matchpairs
+endfunction
+" }}}
 
-  " Fix Vdebug colors
-  hi default DbgCurrentLine guibg=#000000 guifg=#8ae234 ctermfg=81 term=bold
-  hi default DbgCurrentSign guibg=#000000 guifg=#8ae234 ctermfg=81 term=bold
-  hi default DbgBreakptLine guibg=#202020 guifg=#8ae234 ctermfg=81 term=bold
-  hi default DbgBreakptSign guibg=#202020 guifg=#8ae234 ctermfg=81 term=bold
-endfunc
-
-" Inserts "use" statement for namespace of the class under cursor
-" using php-namespace plugin
-func! IPhpInsertUse()
-  call PhpInsertUse()
-  call feedkeys('a',  'n')
-endfunc
-"}}}
-
-func! s:FThaskell()
+func! s:FThaskell() "{{{
   set tabstop=8                   "A tab is 8 spaces
   set expandtab                   "Always uses spaces instead of tabs
   set softtabstop=4               "Insert 4 spaces when tab is pressed
   set shiftwidth=4                "An indent is 4 spaces
   set shiftround                  "Round indent to nearest shiftwidth multiple
 endfunc
+"}}}
 
-" }}}
-
-" vimrc.after {{{
-" This is a place to override settings. For instance, you can set different
-" settings depending on current path:
-"
-"    function! SetupProjectEnvironment()
-"    let l:path = expand('%:p')
-"    if l:path =~ '/www/s3/'
-"      if &filetype == 'yaml'
-"        setlocal et ts=2 sw=2 sts=2
-"      else
-"        setlocal noet ts=2 sts=2 sw=2
-"      endif
-"    endif
-"    endfunction
-"    autocmd! BufReadPost,BufNewFile * call SetupProjectEnvironment()
-"
-"    See http://vim.wikia.com/wiki/Project_specific_settings
+" Functions }}}
 
 if filereadable(expand("~/.vim/conf.d/vimrc.after"))
   source ~/.vim/conf.d/vimrc.after
 endif
-" }}}
+
+" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
