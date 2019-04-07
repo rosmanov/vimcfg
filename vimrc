@@ -149,7 +149,7 @@ augroup FormatSource
 augroup end
 augroup CFileType
   au!
-  au FileType,BufRead c,cpp,java,go setl cindent cinoptions=N-sp0t0s
+  au FileType,BufRead c,cpp,objc,objcpp,java,go setl cindent cinoptions=N-sp0t0s
 augroup end
 augroup PhpFiletype
   au!
@@ -210,6 +210,24 @@ if gitroot != ''
 endif
 " }}}
 
+"{{{ vim-lsp
+" Group for file types using clangd-based Language Server Protocol implementations.
+if !exists('g:my_clangd_executable')
+  let g:my_clangd_executable = 'clangd'
+endif
+let g:lsp_async_completion = 1
+let g:asyncomplete_popup_delay = 100
+let g:lsp_diagnostics_enabled = 0
+augroup LspClangdType
+  au!
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_nifo->[g:my_clangd_executable, '-pch-storage=memory']},
+        \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        \ })
+augroup end
+"}}}
+
 " {{{ NERDTree
 let NERDTreeShowBookmarks=1
 let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
@@ -269,9 +287,7 @@ if !exists('g:airline_powerline_fonts')
   let g:airline_right_sep='‹' " Slightly fancier than '<'
 endif
 " ALE extension info in airline
-if exists('g:loaded_ale')
-  let g:airline#extensions#ale#enabled = 1
-endif
+let g:airline#extensions#ale#enabled = 1
 " }}}
 
 "{{{ NCM2 (completion manager)
@@ -292,7 +308,7 @@ augroup NCM2
 augroup end
 "}}}
 
-" Plugins END }}}
+" Plugins }}}
 
 "{{{ Plugin fixes
 " 'notes' plugin sets completeopt+=longest globally, which badly affects to

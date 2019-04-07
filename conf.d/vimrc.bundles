@@ -1,4 +1,4 @@
-" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={,} foldlevel=0 foldmethod=marker spell:
+" vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
 
 set nocompatible        " Must be first line
 set background=dark
@@ -10,9 +10,9 @@ function! PlugCond(cond, ...)
 endfunction
 
 
-" Plugins {
+" Plugins {{{
 
-" Dependencies {
+" Dependencies {{{
 Plug 'MarcWeber/vim-addon-mw-utils'
 if executable('ag')
   Plug 'mileszs/ack.vim'
@@ -23,10 +23,10 @@ elseif executable('ack-grep')
 elseif executable('ack')
   Plug 'mileszs/ack.vim'
 endif
-" }
+" }}}
 
 if !exists('g:my_bundle_groups')
-  let g:my_bundle_groups=['general', 'programming', 'php', 'python', 'javascript', 'html', 'misc', 'syntax']
+  let g:my_bundle_groups=['general', 'programming', 'php', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax']
 endif
 
 "   let g:override_my_bundles = 1
@@ -100,6 +100,15 @@ if !exists("g:override_my_bundles")
     Plug 'junegunn/fzf'
   endif
 
+  if count(g:my_bundle_groups, 'cpp')
+    "Plug 'Valloric/YouCompleteMe'
+    "Plug 'Rip-Rip/clang_complete'
+    Plug 'prabirshrestha/async.vim'
+    Plug 'prabirshrestha/vim-lsp'
+    Plug 'prabirshrestha/asyncomplete.vim'
+    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  endif
+
   if count(g:my_bundle_groups, 'ruby')
     Plug 'vim-ruby/vim-ruby'
     Plug 'tpope/vim-rails'
@@ -143,9 +152,8 @@ if !exists("g:override_my_bundles")
       Plug b
     endfor
   endif
-
 endif
-" }
+" }}}
 
 set shortmess+=filmnrxoOtT      " Avoids 'hit enter'
 
