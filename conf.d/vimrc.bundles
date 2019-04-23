@@ -91,8 +91,6 @@ if !exists("g:override_my_bundles")
     Plug 'roxma/ncm-phpactor', PlugCond(has('nvim'))
 
     Plug 'phpactor/ncm2-phpactor'
-    "Plug 'ncm2/ncm2-bufword'
-    "Plug 'ncm2/ncm2-path'
 
     "Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 
@@ -102,11 +100,12 @@ if !exists("g:override_my_bundles")
 
   if count(g:my_bundle_groups, 'cpp')
     "Plug 'Valloric/YouCompleteMe'
-    "Plug 'Rip-Rip/clang_complete'
-    Plug 'prabirshrestha/async.vim'
-    Plug 'prabirshrestha/vim-lsp'
-    Plug 'prabirshrestha/asyncomplete.vim'
-    Plug 'prabirshrestha/asyncomplete-lsp.vim'
+    Plug 'Rip-Rip/clang_complete'
+
+    "Plug 'prabirshrestha/async.vim'
+    "Plug 'prabirshrestha/vim-lsp'
+    "Plug 'prabirshrestha/asyncomplete.vim'
+    "Plug 'prabirshrestha/asyncomplete-lsp.vim'
   endif
 
   if count(g:my_bundle_groups, 'ruby')
