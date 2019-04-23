@@ -135,10 +135,10 @@ set list listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic 
 " {{{ Formatting
 set nowrap            " Do not wrap long lines
 set autoindent
-set shiftwidth=2
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
 set expandtab
-set tabstop=2
-set softtabstop=2
 set nojoinspaces      " Prevents inserting two spaces after punctuation on a join (J)
 set splitright        " Puts new vsplit windows to the right of the current
 set splitbelow        " Puts new split windows to the bottom of the current
