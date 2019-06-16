@@ -96,11 +96,13 @@ if !exists("g:override_my_bundles")
 
     " Multi-entry selection UI
     Plug 'junegunn/fzf'
+    " .twig syntax support
+    Plug 'evidens/vim-twig'
   endif
 
   if count(g:my_bundle_groups, 'cpp')
-    "Plug 'Valloric/YouCompleteMe'
-    Plug 'Rip-Rip/clang_complete'
+    Plug 'Valloric/YouCompleteMe'
+    "Plug 'Rip-Rip/clang_complete'
 
     "Plug 'prabirshrestha/async.vim'
     "Plug 'prabirshrestha/vim-lsp'

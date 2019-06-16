@@ -178,6 +178,9 @@ execute 'source' fnameescape(g:my_maps_file)
 
 " Plugins {{{
 
+" YCM
+let g:ycm_key_detailed_diagnostics = 0
+
 " Matchit
 let b:match_ignorecase = 1
 
@@ -371,6 +374,12 @@ function! s:FTphp() " {{{
 
   let g:PHP_vintage_case_default_indent = 1
 
+  if !exists('g:ycm_filetype_blacklist')
+    let g:ycm_filetype_blacklist = {'php': 1};
+  else
+    g:ycm_filetype_blacklist['php'] = 1;
+  endif
+
   if exists('g:loaded_ale')
     let g:ale_php_phpcs_executable = expand('~/.vim/tools/phpcs.sh')
     let g:ale_php_phpstan_executable = expand('~/.vim/tools/phpstan.sh')
@@ -396,5 +405,4 @@ endfunc
 if filereadable(expand("~/.vim/conf.d/vimrc.after"))
   source ~/.vim/conf.d/vimrc.after
 endif
-
 " vim: set sw=2 ts=2 sts=2 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
