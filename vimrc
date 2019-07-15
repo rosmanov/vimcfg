@@ -189,7 +189,7 @@ let g:notes_directories = ["~/.vim-notes"]
 
 "{{{ neosnippet
 " Remap the default combination <C-k> which is used to enter digraphs
-inoremap <C-y> <C-k>
+inoremap <C-d> <C-k>
 
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)

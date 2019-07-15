@@ -128,6 +128,7 @@ if !exists("g:override_my_bundles")
     Plug 'groenewege/vim-less'
     Plug 'pangloss/vim-javascript'
     Plug 'briancollins/vim-jst'
+    Plug 'leafgarland/typescript-vim'
   endif
 
   if count(g:my_bundle_groups, 'html')
