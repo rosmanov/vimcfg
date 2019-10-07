@@ -31,6 +31,9 @@ set modelines=5
 set exrc " Set project-specific .vimrc
 " Disable autocmd and shell commands in project-specific configuration files
 set secure
+set cmdheight=2
+set updatetime=300
+set signcolumn=yes
 
 " Instead of reverting the cursor to the last position in the buffer, we
 " set it to the first line when editing a git commit message
@@ -151,9 +154,17 @@ augroup CFileType
   au!
   au FileType,BufRead c,cpp,objc,objcpp,java,go setl cindent cinoptions=N-sp0t0s
 augroup end
+augroup CppFileType
+  au!
+  au FileType,BufRead cpp,objcpp setl cms=//%s fdm=marker
+augroup end
 augroup PhpFiletype
   au!
   au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
+augroup end
+augroup RideFiletype
+  au!
+  au BufNewFile,BufRead ride call s:FTride()
 augroup end
 augroup JavaFiletype
   au!
@@ -294,21 +305,23 @@ let g:airline#extensions#ale#enabled = 1
 " }}}
 
 "{{{ NCM2 (completion manager)
-augroup NCM2
-  au!
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-  " enable auto complete for `<backspace>`, `<c-w>` keys.
-  " known issue https://github.com/ncm2/ncm2/issues/7
-  au TextChangedI * call ncm2#auto_trigger()
-  " We shouldn't use 'longest' in completeopt. We also should set 'noinsert'
-  set completeopt=noinsert,menuone,noselect
-  " Suppress the annoying 'match x of y', 'The only match' and 'Pattern not
-  " found' messages
-  set shortmess+=c
-  let g:ncm2#complete_delay = 60
-  let g:ncm2#popup_delay = 60
-  let g:ncm2#popup_limit = 10
-augroup end
+if exists(':ncm2#enable_for_buffer()')
+  augroup NCM2
+    au!
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    " enable auto complete for `<backspace>`, `<c-w>` keys.
+    " known issue https://github.com/ncm2/ncm2/issues/7
+    au TextChangedI * call ncm2#auto_trigger()
+    " We shouldn't use 'longest' in completeopt. We also should set 'noinsert'
+    set completeopt=noinsert,menuone,noselect
+    " Suppress the annoying 'match x of y', 'The only match' and 'Pattern not
+    " found' messages
+    set shortmess+=c
+    let g:ncm2#complete_delay = 60
+    let g:ncm2#popup_delay = 60
+    let g:ncm2#popup_limit = 10
+  augroup end
+endif
 "}}}
 
 " Plugins }}}
@@ -375,9 +388,9 @@ function! s:FTphp() " {{{
   let g:PHP_vintage_case_default_indent = 1
 
   if !exists('g:ycm_filetype_blacklist')
-    let g:ycm_filetype_blacklist = {'php': 1};
+    let g:ycm_filetype_blacklist = {'php': 1}
   else
-    g:ycm_filetype_blacklist['php'] = 1;
+    g:ycm_filetype_blacklist['php'] = 1
   endif
 
   if exists('g:loaded_ale')
@@ -388,6 +401,15 @@ function! s:FTphp() " {{{
 
   let delimitMate_matchpairs = "(:),[:],{:}"
   let b:delimitMate_matchpairs = delimitMate_matchpairs
+endfunction
+" }}}
+"
+function! s:FTride() " {{{
+  if !exists('g:ycm_filetype_blacklist')
+    let g:ycm_filetype_blacklist = {'ride': 1}
+  else
+    g:ycm_filetype_blacklist['ride'] = 1
+  endif
 endfunction
 " }}}
 

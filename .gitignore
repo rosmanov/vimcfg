@@ -1,9 +1,10 @@
-bundle/*
+/bundle/*
 !.keep
-conf.d/vimrc.before
-conf.d/vimrc.after
+/conf.d/vimrc.before
+/conf.d/vimrc.after
 *~
 .netrwhist
-plugged
-autoload
-spell/*
+/plugged
+/autoload
+/spell/*
+/coc-settings.json
