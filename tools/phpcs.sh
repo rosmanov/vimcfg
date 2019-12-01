@@ -1,2 +1,2 @@
 #!/bin/bash -
-/home/ruslan/.composer/vendor/bin/phpcs -n "$@"
+"$HOME/.composer/vendor/bin/phpcs" -n "$@"
