@@ -22,6 +22,10 @@ set mousehide               " Hide the mouse cursor while typing
 scriptencoding utf-8
 set clipboard=unnamedplus
 set shortmess+=filmnrxoOtT  " Abbrev. of messages (avoids 'hit enter')
+" don't give |ins-completion-menu| messages
+set shortmess+=c
+" Always show signcolumns
+set signcolumn=yes
 " Better Unix / Windows compatibility
 set viewoptions=folds,options,cursor,unix,slash
 set history=50
@@ -112,6 +116,8 @@ if has('statusline')
   set statusline=%<%f\                     " Filename
   set statusline+=%w%h%m%r                 " Options
   set statusline+=%{fugitive#statusline()} " Git Hotness
+  " Add status line support, for integration with other plugin, checkout `:h coc-status`
+  set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
   set statusline+=\ [%{&ff}/%Y]            " Filetype
   set statusline+=\ [%{getcwd()}]          " Current dir
   set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
@@ -191,6 +197,10 @@ execute 'source' fnameescape(g:my_maps_file)
 
 " YCM
 let g:ycm_key_detailed_diagnostics = 0
+
+" Coc {{{
+
+" }}}
 
 " Matchit
 let b:match_ignorecase = 1
