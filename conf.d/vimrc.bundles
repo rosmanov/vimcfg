@@ -130,6 +130,7 @@ if !exists("g:override_my_bundles")
     Plug 'pangloss/vim-javascript'
     Plug 'briancollins/vim-jst'
     Plug 'leafgarland/typescript-vim'
+    Plug 'ianks/vim-tsx'
   endif
 
   if count(g:my_bundle_groups, 'html')
@@ -142,6 +143,11 @@ if !exists("g:override_my_bundles")
     " vim-notes depends on vim-misc
     Plug 'xolox/vim-misc'
     Plug 'xolox/vim-notes'
+  endif
+
+  if count(g:my_bundle_groups, 'jira')
+    "Plug 'paulkass/jira-vim'
+    Plug 'vim-scripts/confluencewiki.vim'
   endif
 
   if exists("g:my_bundle_syntax")

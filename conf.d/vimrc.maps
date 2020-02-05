@@ -55,7 +55,7 @@ if !exists('g:my_no_fastTabs')
     map <S-L> gt
 endif
 
-" Stupid shift key fixes
+" Stupid shift key fixes{{{
 if !exists('g:my_no_keyfixes')
     if has("user_commands")
         command! -bang -nargs=* -complete=file E e<bang> <args>
@@ -71,6 +71,7 @@ if !exists('g:my_no_keyfixes')
 
     cmap Tabe tabe
 endif
+"}}}
 
 " Most prefer to toggle search highlighting rather than clear the current
 " search results. To clear search highlighting rather than toggle it on
@@ -131,10 +132,26 @@ nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<C
 map zl zL
 map zh zH
 
+
+" Copy the current path to unnamed register so that it can be pasted with `p`
+nmap <silent> <localleader>cp :let @+ = expand("%")<cr>
+
+" Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
+
 " fullscreen mode for GVIM and Terminal, need 'wmctrl' in you PATH
 map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
-" map Russian keys
+" Russian keys
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,
 set langmap+=Ж:б\\,,ю.,ё`,Ё~,Ю>,Б<
 
@@ -149,6 +166,7 @@ nnoremap <leader>e :NERDTreeFind<CR>
 
 " TagBar plugin
 nnoremap <silent> <localleader>tt :TagbarToggle<CR>
+
 
 "{{{ Completion
 " TAB Completion
@@ -172,7 +190,7 @@ function! s:check_back_space() abort
 endfunction
 " Completion }}}
 
-" Fugitive plugin
+" Fugitive plugin{{{
 nnoremap <silent> <leader>gs :Gstatus<CR>
 nnoremap <silent> <leader>gd :Gdiff<CR>
 nnoremap <silent> <leader>gc :Gcommit<CR>
@@ -183,14 +201,15 @@ nnoremap <silent> <leader>gr :Gread<CR>
 nnoremap <silent> <leader>gw :Gwrite<CR>
 nnoremap <silent> <leader>ge :Gedit<CR>
 nnoremap <silent> <leader>gg :SignifyToggle<CR>
+"}}}
 
-if exists(':YcmCompleter')
+if exists(':YcmCompleter')"{{{
     " YouCompleteMe plugin
     " Default value for g:ycm_key_detailed_diagnostics (<leader>d) conflicts with
     " PHP mappings.
     let g:ycm_key_detailed_diagnostics = ''
     nnoremap <silent> <leader>jd :YcmCompleter GoTo<cr>
-endif
+endif"}}}
 
 "{{{ CoC plugin
 " Use tab for trigger completion with characters ahead and navigate.
