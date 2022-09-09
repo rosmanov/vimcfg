@@ -169,20 +169,27 @@ nnoremap <silent> <localleader>tt :TagbarToggle<CR>
 
 
 "{{{ Completion
-" TAB Completion
-" Use <Tab> instead of <C-n>, if completion menu is visible.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm()
+            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackSpace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+" Insert <tab> when previous text is space, refresh completion if not.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-" Use <S-Tab> instead of <C-P>, if completion menu is visible.
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+            \ coc#pum#visible() ? coc#pum#next(1):
+            \ CheckBackSpace() ? "\<Tab>" :
+            \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
 " When the <Enter> key is pressed while the popup menu is visible, it only
 " hides the menu. Use this mapping to close the menu and also start a new
 " line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+"inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -233,6 +240,10 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Confirm the completion when popupmenu is visible, insert <CR> and
+" notify coc.nvim otherwise.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[c` and `]c` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
@@ -267,6 +278,9 @@ nmap <leader>rR <Plug>(coc-refactor)
 " Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+
+xmap <F8>  <Plug>(coc-format)
+nmap <F8>  <Plug>(coc-format)
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -311,6 +325,37 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+
+" coc-snippets plugin
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+"let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+"let g:coc_snippet_prev = '<c-k>'
+" Use <C-j> for both expand and jump (make expand higher priority.)
+"imap <C-j> <Plug>(coc-snippets-expand-jump)
+" Use <leader>x for convert visual selected code to snippet
+"xmap <leader>x  <Plug>(coc-convert-snippet)
+"}}}
+
+"{{{ 
+let g:vimspector_enable_mappings = 'HUMAN'
+nmap <leader>vl :call vimspector#Launch()<CR>
+nmap <leader>vr :VimspectorReset<CR>
+nmap <leader>ve :VimspectorEval
+nmap <leader>vw :VimspectorWatch
+nmap <leader>vo :VimspectorShowOutput
+nmap <leader>vi <Plug>VimspectorBalloonEval
+xmap <leader>vi <Plug>VimspectorBalloonEval
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB', 'vscode-node-debug2' ]
 "}}}
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
