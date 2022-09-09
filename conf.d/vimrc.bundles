@@ -26,7 +26,7 @@ endif
 " }}}
 
 if !exists('g:my_bundle_groups')
-  let g:my_bundle_groups=['general', 'php', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax']
+  let g:my_bundle_groups=['general', 'php', 'go', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax']
 endif
 
 "   let g:override_my_bundles = 1
@@ -101,6 +101,10 @@ if !exists("g:override_my_bundles")
     Plug 'junegunn/fzf'
     " .twig syntax support
     Plug 'evidens/vim-twig'
+  endif
+
+  if count(g:my_bundle_groups, 'go')
+    Plug 'puremourning/vimspector'
   endif
 
   if count(g:my_bundle_groups, 'cpp')
