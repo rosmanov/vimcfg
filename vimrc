@@ -397,11 +397,6 @@ function! s:FTphp() " {{{
 
   let g:PHP_vintage_case_default_indent = 1
 
-  if !exists('g:ycm_filetype_blacklist')
-    let g:ycm_filetype_blacklist = {'php': 1}
-  else
-    g:ycm_filetype_blacklist['php'] = 1
-  endif
 
   if exists('g:loaded_ale')
     let g:ale_php_phpcs_executable = expand('~/.vim/tools/phpcs.sh')
