@@ -168,6 +168,10 @@ augroup PhpFiletype
   au!
   au BufNewFile,BufRead *.php,*.cphp,*.phpt call s:FTphp()
 augroup end
+augroup GoFiletype
+  au!
+  au BufNewFile,BufRead *.go call s:FTgo()
+augroup end
 augroup RideFiletype
   au!
   au BufNewFile,BufRead ride call s:FTride()
@@ -406,6 +410,11 @@ function! s:FTphp() " {{{
 
   let delimitMate_matchpairs = "(:),[:],{:}"
   let b:delimitMate_matchpairs = delimitMate_matchpairs
+endfunction
+" }}}
+"
+function! s:FTgo() " {{{
+  setl noet ts=4 sts=4 sw=4
 endfunction
 " }}}
 "
