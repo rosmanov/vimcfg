@@ -228,8 +228,10 @@ endif
 
 " {{{ CTags and CScope
 set tags=./tags;/,~/.vimtags
-" Disable "Added cscope database" message on startup
-set nocscopeverbose
+if has('cscope')
+  " Disable "Added cscope database" message on startup
+  set nocscopeverbose
+endif
 
 " Make tags from .git/tags file available in all levels of a repository
 let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
