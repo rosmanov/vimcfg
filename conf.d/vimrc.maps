@@ -342,7 +342,7 @@ vmap <C-j> <Plug>(coc-snippets-select)
 "xmap <leader>x  <Plug>(coc-convert-snippet)
 "}}}
 
-"{{{ 
+"{{{ Vimpspector
 let g:vimspector_enable_mappings = 'HUMAN'
 nmap <leader>vl :call vimspector#Launch()<CR>
 nmap <leader>vr :VimspectorReset<CR>
@@ -352,10 +352,15 @@ nmap <leader>vo :VimspectorShowOutput
 nmap <leader>vi <Plug>VimspectorBalloonEval
 xmap <leader>vi <Plug>VimspectorBalloonEval
 " for normal mode - the word under the cursor
-nmap <Leader>di <Plug>VimspectorBalloonEval
+"nmap <Leader>di <Plug>VimspectorBalloonEval
 " for visual mode, the visually selected text
-xmap <Leader>di <Plug>VimspectorBalloonEval
+"xmap <Leader>di <Plug>VimspectorBalloonEval
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-go', 'CodeLLDB', 'vscode-node-debug2' ]
+"}}}
+
+"{{{ Copilot
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
 "}}}
 
 " vim: set sw=4 ts=4 sts=4 et tw=78 foldmarker={{{,}}} foldlevel=0 foldmethod=marker spell:
