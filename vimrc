@@ -85,7 +85,7 @@ else
 endif
 
 if !has('gui_running')
-  if &term == 'xterm' || &term == 'screen'
+  if &term == 'xterm' || &term == 'screen' || &term == 'screen-256color'
     " Enable 256 colors to stop the CSApprox warning and make xterm vim shine
     set t_Co=256
   elseif &term == 'linux'
@@ -151,7 +151,7 @@ set expandtab
 set nojoinspaces      " Prevents inserting two spaces after punctuation on a join (J)
 set splitright        " Puts new vsplit windows to the right of the current
 set splitbelow        " Puts new split windows to the bottom of the current
-set pastetoggle=<F12> " Key to enable sane indentation on pastes
+"set pastetoggle=<F12> " Key to enable sane indentation on pastes
 augroup FormatSource
   au!
   au FileType c,cpp,java,go,php,javascript,python,twig,xml,yml autocmd BufWritePre <buffer> call PostFormatSource()
