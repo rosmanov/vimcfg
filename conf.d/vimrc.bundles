@@ -26,7 +26,7 @@ endif
 " }}}
 
 if !exists('g:my_bundle_groups')
-  let g:my_bundle_groups=['general', 'php', 'go', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax']
+  let g:my_bundle_groups=['general', 'php', 'go', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax', 'hashicorp']
 endif
 
 "   let g:override_my_bundles = 1
@@ -140,6 +140,10 @@ if !exists("g:override_my_bundles")
   if count(g:my_bundle_groups, 'html')
     " Plug 'amirh/HTML-AutoCloseTag'
     Plug 'hail2u/vim-css3-syntax'
+  endif
+
+  if count(g:my_bundle_groups, 'hashicorp')
+    Plug 'hashivim/vim-terraform'
   endif
 
   if count(g:my_bundle_groups, 'misc')
