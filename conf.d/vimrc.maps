@@ -83,9 +83,11 @@ else
     nmap <silent> <leader>/ :set invhlsearch<CR>
 endif
 
-" Use jk instead of 'Escape'
-inoremap jk <esc>
-inoremap <esc> <nop>
+" Use jk instead of 'Escape', if it's not the neovim embedded into VS Code.
+if !exists('g:vscode')
+    inoremap jk <esc>
+    inoremap <esc> <nop>
+endif
 
 " Find merge conflict markers
 map <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>

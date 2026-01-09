@@ -26,7 +26,7 @@ endif
 " }}}
 
 if !exists('g:my_bundle_groups')
-  let g:my_bundle_groups=['general', 'php', 'go', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax', 'hashicorp']
+  let g:my_bundle_groups=['general', 'php', 'go', 'python', 'cpp', 'javascript', 'html', 'misc', 'syntax', 'hashicorp', 'kotlin']
 endif
 
 "   let g:override_my_bundles = 1
@@ -55,6 +55,7 @@ if !exists("g:override_my_bundles")
     " ALE plugin is better than `syntastic` because of its asynchronous features
     Plug 'w0rp/ale'
     "Plug 'vim-syntastic/syntastic'
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   endif
 
   Plug 'tpope/vim-fugitive'
@@ -113,6 +114,19 @@ if !exists("g:override_my_bundles")
     "Plug 'prabirshrestha/vim-lsp'
     "Plug 'prabirshrestha/asyncomplete.vim'
     "Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  endif
+
+  if count(g:my_bundle_groups, 'kotlin')
+    " Syntax highlighting
+    Plug 'udalov/kotlin-vim'
+
+    " LSP client (pick one)
+    " If you’re already using coc.nvim:
+    " (you already have coc.nvim in your general group)
+    " Kotlin support can be installed later via :CocInstall coc-kotlin
+
+    " Or, if you prefer ALE for linting + formatting, keep ALE enabled
+    " (you already have ALE plugged in under 'syntax')
   endif
 
   if count(g:my_bundle_groups, 'ruby')
