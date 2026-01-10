@@ -1,10 +1,11 @@
-/bundle/*
-!.keep
-/conf.d/vimrc.before
-/conf.d/vimrc.after
+# Machine-specific config (not synced)
+lua/config/local.lua
+
+# Lazy.nvim plugin directory
+lazy-lock.json
+
+# Backup files
+*.swp
+*.swo
 *~
-.netrwhist
-/plugged
-/autoload
-/spell/*
-/coc-settings.json
+.DS_Store

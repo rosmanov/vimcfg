@@ -1,6 +1,0 @@
-#!/bin/bash -
-
-BACKUP_SUFFIX=.vimcfg_backup_`date +%s`
-VUNDLE_DIR=${HOME}/.vim/bundle/vundle
-VIMRC_BUNDLES_CONF=conf.d/vimrc.bundles
-VIM_DIR="${HOME}/.vim"
