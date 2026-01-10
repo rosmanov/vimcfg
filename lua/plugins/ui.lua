@@ -117,13 +117,18 @@ return {
     priority = 1000,
   },
   {
+    "flazz/vim-colorschemes",
+    lazy = false,
+    priority = 1000,
+  },
+  {
     "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,
     config = function()
       -- Set your preferred colorscheme here:
-      -- Options: "tokyonight", "catppuccin-mocha", "gruvbox-material", "kanagawa"
-      vim.cmd([[colorscheme catppuccin-mocha]])
+      -- Options: "tokyonight", "catppuccin-mocha", "gruvbox-material", "kanagawa", "darkspectrum"
+      vim.cmd([[colorscheme darkspectrum]])
     end,
   },
 
