@@ -5,6 +5,7 @@ My Neovim configuration.
 ## Features
 
 - Native LSP with nvim-lspconfig (PHP via intelephense, Go, Python, TypeScript, etc.)
+- **Mason** for managing LSP servers, linters, and formatters
 - **Linting with nvim-lint** (phpmd, phpcs, phpstan, eslint, etc.)
 - **Formatting with conform.nvim** (phpcbf, prettier, stylua)
 - **Project-specific linter/formatter configuration**
@@ -52,19 +53,28 @@ npm install -g vscode-langservers-extracted
 npm install -g bash-language-server
 ```
 
-**Linters and formatters (optional but recommended):**
-```bash
-# PHP linters
-composer global require phpmd/phpmd
-composer global require squizlabs/php_codesniffer
-composer global require phpstan/phpstan
+**Linters and formatters (optional):**
 
-# JavaScript/TypeScript
-npm install -g eslint prettier
+You can install these tools either:
+1. **Via Mason** (recommended - easier):
+   ```vim
+   :Mason
+   ```
+   Then search and install: phpmd, phpcs, phpstan, eslint, prettier, stylua, etc.
 
-# Lua
-brew install stylua  # or cargo install stylua
-```
+2. **Manually**:
+   ```bash
+   # PHP linters
+   composer global require phpmd/phpmd
+   composer global require squizlabs/php_codesniffer
+   composer global require phpstan/phpstan
+
+   # JavaScript/TypeScript
+   npm install -g eslint prettier
+
+   # Lua
+   brew install stylua  # or cargo install stylua
+   ```
 
 ### Setup
 
@@ -221,6 +231,35 @@ All other settings work identically on macOS and Linux.
 - `,tn` - New tab
 - `,tc` - Close tab
 
+## Useful Commands
+
+### Mason (Package Management)
+```vim
+:Mason          " Open Mason UI to install/manage LSP servers, linters, formatters
+:MasonUpdate    " Update Mason registry
+:MasonLog       " View Mason log
+```
+
+### Plugin Management
+```vim
+:Lazy           " Open Lazy.nvim UI
+:Lazy update    " Update all plugins
+:Lazy sync      " Clean, install, and update plugins
+```
+
+### LSP
+```vim
+:LspInfo        " Show LSP client info
+:LspRestart     " Restart LSP clients
+```
+
+### Linting & Formatting
+```vim
+:Lint           " Manually trigger linting
+:Format         " Format current buffer
+:FormatToggle   " Toggle format-on-save
+```
+
 ## Troubleshooting
 
 ### Check health
@@ -231,11 +270,6 @@ All other settings work identically on macOS and Linux.
 ### Check LSP status
 ```vim
 :LspInfo
-```
-
-### Update plugins
-```vim
-:Lazy update
 ```
 
 ### Python provider issues

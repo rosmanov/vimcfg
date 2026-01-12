@@ -18,6 +18,7 @@ require("lazy").setup({
     { import = "plugins.core" },
     { import = "plugins.ui" },
     { import = "plugins.editor" },
+    { import = "plugins.mason" },
     { import = "plugins.lsp" },
     { import = "plugins.linting" },
     { import = "plugins.git" },
