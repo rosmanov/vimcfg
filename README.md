@@ -4,7 +4,10 @@ My Neovim configuration.
 
 ## Features
 
-- Native LSP with nvim-lspconfig (PHP via intelephense, Go, Python, etc.)
+- Native LSP with nvim-lspconfig (PHP via intelephense, Go, Python, TypeScript, etc.)
+- **Linting with nvim-lint** (phpmd, phpcs, phpstan, eslint, etc.)
+- **Formatting with conform.nvim** (phpcbf, prettier, stylua)
+- **Project-specific linter/formatter configuration**
 - Lazy.nvim plugin manager
 - Telescope fuzzy finder
 - nvim-tree file explorer
@@ -49,6 +52,20 @@ npm install -g vscode-langservers-extracted
 npm install -g bash-language-server
 ```
 
+**Linters and formatters (optional but recommended):**
+```bash
+# PHP linters
+composer global require phpmd/phpmd
+composer global require squizlabs/php_codesniffer
+composer global require phpstan/phpstan
+
+# JavaScript/TypeScript
+npm install -g eslint prettier
+
+# Lua
+brew install stylua  # or cargo install stylua
+```
+
 ### Setup
 
 1. **Clone or copy this config:**
@@ -79,7 +96,7 @@ npm install -g bash-language-server
 
 ## Machine-Specific Configuration
 
-For settings that differ between machines (Python paths, etc.), create:
+For settings that differ between machines (Python paths, project-specific linters, etc.), create:
 
 ```bash
 ~/.config/nvim/lua/config/local.lua
@@ -91,11 +108,65 @@ return {
   -- Override Python path if auto-detection doesn't work
   python3_host_prog = "/usr/local/bin/python3",
 
-  -- Add other machine-specific settings
+  -- Project-specific configurations
+  projects = {
+    ["~/projects/myproject"] = {
+      -- Linters by filetype for this project
+      linters_by_ft = {
+        php = { "php", "phpmd", "phpcs", "phpstan" },
+        javascript = { "eslint" },
+      },
+
+      -- Custom linter configurations
+      custom_linters = {
+        phpcs = {
+          cmd = vim.fn.expand("~/projects/myproject/vendor/bin/phpcs"),
+          args = {
+            "--standard=" .. vim.fn.expand("~/projects/myproject/phpcs.xml"),
+            "--report=json",
+          },
+        },
+        eslint = {
+          cmd = vim.fn.expand("~/projects/myproject/node_modules/.bin/eslint"),
+        },
+      },
+
+      -- Formatters by filetype
+      formatters_by_ft = {
+        php = { "phpcbf" },
+        javascript = { "prettier" },
+      },
+
+      -- Custom formatter configurations
+      custom_formatters = {
+        phpcbf = {
+          command = vim.fn.expand("~/projects/myproject/vendor/bin/phpcbf"),
+          args = { "--standard=PSR12", "-" },
+          stdin = true,
+        },
+      },
+    },
+  },
+
+  -- LSP server overrides
+  lsp_servers = {
+    intelephense = {
+      settings = {
+        intelephense = {
+          environment = { phpVersion = "8.2.15" },
+        },
+      },
+    },
+  },
 }
 ```
 
 This file is gitignored and won't be synced.
+
+**How project-specific configs work:**
+- When you open a file in `~/projects/myproject`, the config automatically detects it
+- Project-specific linters and formatters are used instead of defaults
+- All user-specific paths stay in `local.lua` (not committed to git)
 
 ## Platform Differences
 
@@ -128,9 +199,15 @@ All other settings work identically on macOS and Linux.
 - `K` - Hover documentation
 - `,rn` - Rename symbol
 - `,ca` - Code actions
-- `<F8>` - Format code
+- `<F8>` - Format code (LSP)
 - `[d` / `]d` - Previous/next diagnostic
 - `<C-p>` - Search symbols (workspace)
+
+### Linting & Formatting
+- `:Lint` - Manually trigger linting
+- `:Format` - Manually format current buffer
+- `:FormatToggle` - Toggle format-on-save
+- Format on save is enabled by default
 
 ### Git
 - `,gs` - Git status
@@ -168,3 +245,29 @@ Check detected path:
 ```
 
 Override in `lua/config/local.lua` if needed.
+
+### Linting not working
+1. Check if linters are installed:
+   ```bash
+   which phpcs phpstan phpmd eslint
+   ```
+
+2. Verify project config is loaded:
+   ```vim
+   :lua print(vim.inspect(require("config.project-local").load_project_config()))
+   ```
+
+3. Check linter configuration:
+   ```vim
+   :lua print(vim.inspect(require("lint").linters_by_ft))
+   ```
+
+4. Check for errors:
+   ```vim
+   :messages
+   ```
+
+5. Test linter manually:
+   ```vim
+   :Lint
+   ```

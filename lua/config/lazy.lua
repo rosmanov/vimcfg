@@ -19,6 +19,7 @@ require("lazy").setup({
     { import = "plugins.ui" },
     { import = "plugins.editor" },
     { import = "plugins.lsp" },
+    { import = "plugins.linting" },
     { import = "plugins.git" },
     { import = "plugins.tools" },
     { import = "plugins.languages.php" },
