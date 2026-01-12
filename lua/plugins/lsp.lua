@@ -102,6 +102,18 @@ return {
         },
         kotlin_language_server = {},
         bashls = {},
+        lemmix = {
+          settings = {
+            xml = {
+              format = {
+                enabled = true,
+                splitAttributes = "preserve",
+                joinCDATALines = false,
+                maxLineWidth = 120,
+              }
+            }
+          }
+        }
       }
 
       -- Merge local overrides
