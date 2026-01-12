@@ -45,6 +45,10 @@ return {
         end,
       })
 
+      -- Load local config overrides
+      local ok, local_config = pcall(require, "config.local")
+      local local_servers = (ok and local_config.lsp_servers) or {}
+
       -- Language server configurations
       local servers = {
         intelephense = {
@@ -92,6 +96,15 @@ return {
         kotlin_language_server = {},
         bashls = {},
       }
+
+      -- Merge local overrides
+      for name, local_config in pairs(local_servers) do
+        if servers[name] then
+          servers[name] = vim.tbl_deep_extend("force", servers[name], local_config)
+        else
+          servers[name] = local_config
+        end
+      end
 
       -- Setup servers
       if nvim_11 then
