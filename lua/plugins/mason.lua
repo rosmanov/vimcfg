@@ -29,6 +29,8 @@ return {
         ensure_installed = {
           "lua_ls",
           "bashls",
+          "pyright",
+          "intelephense",
         },
         automatic_installation = false, -- Don't auto-install all servers
       })
