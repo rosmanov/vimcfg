@@ -1,5 +1,13 @@
 -- UI plugins
 return {
+  -- Icon support (preferred by many modern plugins)
+  {
+    "echasnovski/mini.icons",
+    config = function()
+      require("mini.icons").setup()
+    end,
+  },
+
   -- File explorer (replaces NERDTree)
   {
     "nvim-tree/nvim-tree.lua",
