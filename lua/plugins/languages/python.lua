@@ -8,7 +8,6 @@ return {
       "nvim-telescope/telescope.nvim",
     },
     ft = "python",
-    branch = "regexp",
     opts = {
       name = { "venv", ".venv", "env", ".env" },
     },
