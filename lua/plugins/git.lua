@@ -15,7 +15,17 @@ return {
   },
 
   -- GitHub integration
-  { "tpope/vim-rhubarb", dependencies = "tpope/vim-fugitive" },
+  {
+    "tpope/vim-rhubarb",
+    dependencies = "tpope/vim-fugitive",
+    config = function()
+      -- Load GitHub Enterprise URLs from local config
+      local ok, local_config = pcall(require, "config.local")
+      if ok and local_config.github_enterprise_urls then
+        vim.g.github_enterprise_urls = local_config.github_enterprise_urls
+      end
+    end,
+  },
 
   -- Bitbucket integration
   { "tommcdo/vim-fubitive", dependencies = "tpope/vim-fugitive" },
