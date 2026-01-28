@@ -129,9 +129,9 @@ return {
 		lazy = false,
 		priority = 1000,
 		config = function()
-			-- Set your preferred colorscheme here:
-			-- Options: "tokyonight", "catppuccin-mocha", "gruvbox-material", "kanagawa", "darkspectrum"
-			vim.cmd([[colorscheme darkspectrum]])
+			local ok, local_config = pcall(require, "config.local")
+			local colorscheme = (ok and local_config.colorscheme) or "darkspectrum"
+			vim.cmd("colorscheme " .. colorscheme)
 		end,
 	},
 
