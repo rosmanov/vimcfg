@@ -4,3 +4,6 @@ vim.opt_local.expandtab = true
 vim.opt_local.shiftwidth = 2
 vim.opt_local.tabstop = 2
 vim.opt_local.softtabstop = 2
+
+-- Create fold markers without spaces
+vim.opt_local.commentstring = "<!--%s-->"
