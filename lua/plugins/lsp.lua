@@ -28,9 +28,9 @@ return {
           vim.keymap.set("n", "gr", function()
             vim.lsp.buf.references(nil, {
               on_list = function(items)
-                vim.fn.setqflist({}, ' ', items)
-                vim.cmd('copen')
-              end
+                vim.fn.setqflist({}, " ", items)
+                vim.cmd("copen")
+              end,
             })
           end, opts)
           -- Organize imports
@@ -65,8 +65,13 @@ return {
                 maxSize = 5000000,
                 associations = { "*.php", "*.phtml", "*.inc" },
                 exclude = {
-                  "**/.git/**", "**/.svn/**", "**/.hg/**", "**/CVS/**",
-                  "**/.DS_Store/**", "**/node_modules/**", "**/bower_components/**",
+                  "**/.git/**",
+                  "**/.svn/**",
+                  "**/.hg/**",
+                  "**/CVS/**",
+                  "**/.DS_Store/**",
+                  "**/node_modules/**",
+                  "**/bower_components/**",
                   "**/.history/**",
                 },
               },
@@ -102,7 +107,7 @@ return {
         },
         kotlin_language_server = {},
         bashls = {},
-        lemmix = {
+        lemminx = {
           settings = {
             xml = {
               format = {
@@ -110,10 +115,10 @@ return {
                 splitAttributes = "preserve",
                 joinCDATALines = false,
                 maxLineWidth = 120,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       }
 
       -- Merge local overrides
