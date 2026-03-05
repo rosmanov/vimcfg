@@ -9,3 +9,4 @@ lazy-lock.json
 *.swo
 *~
 .DS_Store
+.nvimlog
