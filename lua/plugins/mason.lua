@@ -31,6 +31,7 @@ return {
           "bashls",
           "pyright",
           "intelephense",
+          "terraformls",
         },
         automatic_installation = false, -- Don't auto-install all servers
       })

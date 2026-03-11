@@ -119,6 +119,13 @@ return {
             },
           },
         },
+        terraformls = {
+          settings = {
+            terraform = {
+              timeout = "30s",
+            },
+          },
+        },
       }
 
       -- Merge local overrides
