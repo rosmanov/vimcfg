@@ -94,4 +94,20 @@ return {
     },
     config = true,
   },
+
+  -- Markdown preview
+  {
+    "iamcco/markdown-preview.nvim",
+    ft = { "markdown" },
+    build = "cd app && npm install",
+    keys = {
+      { "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", desc = "Toggle Markdown preview" },
+    },
+    config = function()
+      vim.g.mkdp_auto_close = 0 -- Don't auto-close preview when switching buffers
+      vim.g.mkdp_theme = "light" -- Use light theme for better code contrast
+      -- Alternative: Use GitHub-style highlighting
+      -- vim.g.mkdp_highlight_css = vim.fn.expand('~/.config/nvim/markdown-preview-highlight.css')
+    end,
+  },
 }

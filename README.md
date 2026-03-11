@@ -17,6 +17,7 @@ My Neovim configuration.
 - Treesitter syntax highlighting
 - nvim-cmp completion
 - Copilot support
+- Markdown live preview in browser
 
 ## Installation
 
@@ -230,6 +231,9 @@ All other settings work identically on macOS and Linux.
 - `gt` / `gT` - Next/previous tab
 - `,tn` - New tab
 - `,tc` - Close tab
+
+### Markdown
+- `,mp` - Toggle Markdown preview (opens in browser)
 
 ## Useful Commands
 
