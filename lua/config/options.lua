@@ -55,6 +55,9 @@ vim.fn.mkdir(vim.fn.stdpath("data") .. "/undo", "p")
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 
+-- Shell syntax highlighting - use POSIX mode for sh files
+vim.g.is_posix = 1
+
 -- Python provider - auto-detect or use local config
 local function setup_python()
   -- Try to load local config
