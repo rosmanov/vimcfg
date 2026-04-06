@@ -25,6 +25,7 @@ require("lazy").setup({
     { import = "plugins.tools" },
     { import = "plugins.languages.php" },
     { import = "plugins.languages.python" },
+    { import = "plugins.languages.flutter-dart" },
   },
   rocks = { enabled = false }, -- Disable luarocks (not needed)
   checker = { enabled = true, notify = false },
