@@ -3,7 +3,13 @@ set lines=40 columns=120
 "set guioptions=aegiLt
 "set guifont=Monospace\ 16,Andale\ Mono\ Regular\ 16,Menlo\ Regular\ 16,Consolas\ Regular\ 16,Courier\ New\ Regular\ 16
 "set guifont=Monaco:h16
-:GuiFont Monaco:h14.5
+if has('gui_running')
+  if has('mac')
+    set guifont=Monaco:h14.5
+  else
+    set guifont=JetBrains\ Mono:h12
+  endif
+endif
 
 " Enable Mouse
 set mouse=a
