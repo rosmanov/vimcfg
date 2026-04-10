@@ -16,18 +16,18 @@ return {
       local project_custom_linters = project_local.get_custom_linters()
 
       -- Set linters by filetype (project config takes precedence)
-      lint.linters_by_ft = project_linters_by_ft or lint_config.linters_by_ft or {
-        php = { "php" },
-        javascript = { "eslint" },
-        typescript = { "eslint" },
-        typescriptreact = { "eslint" },
-      }
+      lint.linters_by_ft = project_linters_by_ft
+        or lint_config.linters_by_ft
+        or {
+          php = { "php" },
+          javascript = { "eslint" },
+          typescript = { "eslint" },
+          typescriptreact = { "eslint" },
+          sh = { "shellcheck" },
+        }
 
       -- Apply custom linter configurations (merge global and project configs)
-      local custom_linters = vim.tbl_extend("force",
-        lint_config.custom_linters or {},
-        project_custom_linters or {}
-      )
+      local custom_linters = vim.tbl_extend("force", lint_config.custom_linters or {}, project_custom_linters or {})
 
       for linter_name, config in pairs(custom_linters) do
         if lint.linters[linter_name] then
@@ -85,10 +85,7 @@ return {
         },
 
         -- Custom formatters (merge global and project configs)
-        formatters = vim.tbl_extend("force",
-          format_config.custom_formatters or {},
-          project_custom_formatters or {}
-        ),
+        formatters = vim.tbl_extend("force", format_config.custom_formatters or {}, project_custom_formatters or {}),
 
         -- Format on save (can be disabled)
         format_on_save = function(bufnr)
