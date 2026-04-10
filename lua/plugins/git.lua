@@ -66,6 +66,38 @@ return {
     end,
   },
 
+  -- Git conflict markers navigation and resolution
+  {
+    "akinsho/git-conflict.nvim",
+    event = "BufReadPre",
+    config = function()
+      require("git-conflict").setup({
+        default_mappings = true, -- ]x/[x to navigate, co/ct/cb/c0 to resolve
+        disable_diagnostics = true, -- avoid LSP errors on conflict markers
+      })
+
+      -- Muted colors (tokyonight-inspired) for darkspectrum, which has
+      -- very saturated Diff highlights that look "toxic" with defaults.
+      local function set_conflict_highlights()
+        vim.api.nvim_set_hl(0, "GitConflictCurrent", { bg = "#1c3829", fg = "#73daca" })
+        vim.api.nvim_set_hl(0, "GitConflictCurrentLabel", { bg = "#1c3829", fg = "#73daca", bold = true })
+        vim.api.nvim_set_hl(0, "GitConflictIncoming", { bg = "#1a2a4a", fg = "#7aa2f7" })
+        vim.api.nvim_set_hl(0, "GitConflictIncomingLabel", { bg = "#1a2a4a", fg = "#7aa2f7", bold = true })
+        vim.api.nvim_set_hl(0, "GitConflictAncestor", { bg = "#2d1f3d", fg = "#bb9af7" })
+        vim.api.nvim_set_hl(0, "GitConflictAncestorLabel", { bg = "#2d1f3d", fg = "#bb9af7", bold = true })
+      end
+
+      if vim.g.colors_name == "darkspectrum" then
+        set_conflict_highlights()
+      end
+
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        pattern = "darkspectrum",
+        callback = set_conflict_highlights,
+      })
+    end,
+  },
+
   -- Enhanced diff view
   {
     "sindrets/diffview.nvim",
