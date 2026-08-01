@@ -52,9 +52,11 @@ return {
         end,
       })
 
-      -- Load local config overrides
+      -- Load local config overrides and project-specific global variable overrides
       local ok, local_config = pcall(require, "config.local")
       local local_servers = (ok and local_config.lsp_servers) or {}
+      local project_servers = vim.g.project_lsp_servers or {}
+      local all_overrides = vim.tbl_deep_extend("force", local_servers, project_servers)
 
       -- Language server configurations
       local servers = {
@@ -128,12 +130,12 @@ return {
         },
       }
 
-      -- Merge local overrides
-      for name, local_config in pairs(local_servers) do
+      -- Merge local and project overrides
+      for name, override_config in pairs(all_overrides) do
         if servers[name] then
-          servers[name] = vim.tbl_deep_extend("force", servers[name], local_config)
+          servers[name] = vim.tbl_deep_extend("force", servers[name], override_config)
         else
-          servers[name] = local_config
+          servers[name] = override_config
         end
       end
 

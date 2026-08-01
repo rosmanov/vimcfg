@@ -11,9 +11,9 @@ return {
       local ok, local_config = pcall(require, "config.local")
       local lint_config = (ok and local_config.linters) or {}
 
-      -- Load project-specific configuration
-      local project_linters_by_ft = project_local.get_linters_by_ft()
-      local project_custom_linters = project_local.get_custom_linters()
+      -- Load project-specific configuration (checking helpers first, then global variables)
+      local project_linters_by_ft = project_local.get_linters_by_ft() or vim.g.project_linters_by_ft
+      local project_custom_linters = project_local.get_custom_linters() or vim.g.project_custom_linters
 
       -- Set linters by filetype (project config takes precedence)
       lint.linters_by_ft = project_linters_by_ft
@@ -69,12 +69,14 @@ return {
       local ok, local_config = pcall(require, "config.local")
       local format_config = (ok and local_config.formatters) or {}
 
-      -- Load project-specific configuration
-      local project_formatters_by_ft = project_local.get_formatters_by_ft()
-      local project_custom_formatters = project_local.get_custom_formatters()
+      -- Load project-specific configuration (checking helpers first, then global variables)
+      local project_formatters_by_ft = project_local.get_formatters_by_ft() or vim.g.project_formatters_by_ft
+      local project_custom_formatters = project_local.get_custom_formatters() or vim.g.project_custom_formatters
 
       conform.setup({
         formatters_by_ft = project_formatters_by_ft or format_config.formatters_by_ft or {
+          c = { "clang_format" },
+          cpp = { "clang_format" },
           lua = { "stylua" },
           javascript = { "prettier" },
           typescript = { "prettier" },
@@ -93,7 +95,7 @@ return {
           if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
             return
           end
-          return { timeout_ms = 3000, lsp_fallback = true }
+          return { timeout_ms = 3000, lsp_fallback = false }
         end,
       })
 
@@ -104,9 +106,19 @@ return {
       end, { desc = "Toggle format on save" })
 
       -- Manual format command
-      vim.api.nvim_create_user_command("Format", function()
-        conform.format({ timeout_ms = 3000, lsp_fallback = true })
-      end, { desc = "Format current buffer" })
+      vim.api.nvim_create_user_command("Format", function(opts)
+        conform.format({
+          timeout_ms = 3000,
+          lsp_fallback = false,
+          range = {
+            start = { opts.line1, 0 },
+            ["end"] = { opts.line2, 0 },
+          },
+        })
+      end, {
+        desc = "Format selected range",
+        range = true,
+      })
     end,
   },
 }

@@ -41,6 +41,9 @@ opt.smartindent = true
 opt.foldmethod = "indent"
 opt.foldlevel = 99
 
+-- Project-local configs
+opt.exrc = true
+
 -- Backup and undo
 opt.backup = true
 opt.backupdir = vim.fn.stdpath("data") .. "/backup"
