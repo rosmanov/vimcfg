@@ -31,6 +31,7 @@ return {
           "bashls",
           "pyright",
           "intelephense",
+          "jsonls",
           "terraformls",
           "yamlls",
         },
