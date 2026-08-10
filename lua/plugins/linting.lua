@@ -60,7 +60,7 @@ return {
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
-    cmd = { "ConformInfo", "FormatToggle" },
+    cmd = { "ConformInfo" },
     config = function()
       local conform = require("conform")
       local project_local = require("config.project-local")
@@ -98,12 +98,6 @@ return {
           return { timeout_ms = 3000, lsp_fallback = false }
         end,
       })
-
-      -- Toggle autoformat command
-      vim.api.nvim_create_user_command("FormatToggle", function()
-        vim.g.disable_autoformat = not vim.g.disable_autoformat
-        print("Format on save: " .. (vim.g.disable_autoformat and "disabled" or "enabled"))
-      end, { desc = "Toggle format on save" })
 
       -- Manual format command
       vim.api.nvim_create_user_command("Format", function(opts)

@@ -61,6 +61,7 @@ return {
       -- Language server configurations
       local servers = {
         intelephense = {
+          cmd_env = { NODE_OPTIONS = "--max-old-space-size=8192" },
           settings = {
             intelephense = {
               files = {

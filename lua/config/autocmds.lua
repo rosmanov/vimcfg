@@ -2,6 +2,11 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
+vim.api.nvim_create_user_command("FormatToggle", function()
+  vim.g.disable_autoformat = not vim.g.disable_autoformat
+  print("Format on save: " .. (vim.g.disable_autoformat and "disabled" or "enabled"))
+end, { desc = "Toggle format on save" })
+
 -- Restore cursor position
 local restore_cursor = augroup("RestoreCursor", { clear = true })
 autocmd("BufReadPost", {
