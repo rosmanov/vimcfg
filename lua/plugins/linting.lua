@@ -73,18 +73,28 @@ return {
       local project_formatters_by_ft = project_local.get_formatters_by_ft() or vim.g.project_formatters_by_ft
       local project_custom_formatters = project_local.get_custom_formatters() or vim.g.project_custom_formatters
 
+      -- Default formatters; global (config.local) and project-local overrides are
+      -- merged on top per-filetype so a project override cannot silently drop
+      -- unrelated defaults (e.g. markdown) it doesn't mention.
+      local default_formatters_by_ft = {
+        c = { "clang_format" },
+        cpp = { "clang_format" },
+        lua = { "stylua" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        markdown = { "prettier" },
+      }
+
       conform.setup({
-        formatters_by_ft = project_formatters_by_ft or format_config.formatters_by_ft or {
-          c = { "clang_format" },
-          cpp = { "clang_format" },
-          lua = { "stylua" },
-          javascript = { "prettier" },
-          typescript = { "prettier" },
-          typescriptreact = { "prettier" },
-          json = { "prettier" },
-          yaml = { "prettier" },
-          markdown = { "prettier" },
-        },
+        formatters_by_ft = vim.tbl_extend(
+          "force",
+          default_formatters_by_ft,
+          format_config.formatters_by_ft or {},
+          project_formatters_by_ft or {}
+        ),
 
         -- Custom formatters (merge global and project configs)
         formatters = vim.tbl_extend("force", format_config.custom_formatters or {}, project_custom_formatters or {}),
