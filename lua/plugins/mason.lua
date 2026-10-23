@@ -35,6 +35,7 @@ return {
           "terraformls",
           "yamlls",
           "ts_ls",
+          "autotools_ls",
         },
         automatic_installation = false, -- Don't auto-install all servers
       })

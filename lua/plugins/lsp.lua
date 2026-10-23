@@ -110,6 +110,21 @@ return {
         },
         kotlin_language_server = {},
         bashls = {},
+        autotools_ls = {
+          -- Default filetypes lack m4 (config.m4); default root markers lack config.m4
+          filetypes = { "config", "automake", "make", "m4" },
+          root_dir = function(bufnr, on_dir)
+            -- lspconfig (nvim < 0.11) passes a file name, native API passes a buffer number
+            local path = type(bufnr) == "number" and vim.api.nvim_buf_get_name(bufnr) or bufnr
+            local root = vim.fs.root(path, { "configure.ac", "config.m4", "Makefile.am", "Makefile" })
+              or vim.fs.dirname(path)
+            if type(bufnr) == "number" then
+              on_dir(root)
+            else
+              return root
+            end
+          end,
+        },
         lemminx = {
           settings = {
             xml = {
