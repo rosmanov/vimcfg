@@ -106,7 +106,37 @@ return {
         jsonls = {},
         yamlls = {},
         clangd = {
-          cmd = { "clangd", "--background-index", "--clang-tidy" },
+          -- cmd is a function so flags can be added before the process spawns (before_init is too late)
+          cmd = function(dispatchers, config)
+            local cmd = { "clangd", "--background-index", "--clang-tidy" }
+            local root = config.root_dir
+            if
+              root
+              and not vim.uv.fs_stat(root .. "/compile_commands.json")
+              and vim.uv.fs_stat(root .. "/Makefile")
+            then
+              -- No compile_commands.json: derive one from `make -nB` (dry-run build)
+              local out = vim.fn.system({ "make", "-C", root, "-nB" })
+              local entries = {}
+              if vim.v.shell_error == 0 then
+                for line in out:gmatch("[^\n]+") do
+                  -- drop the libtool/shell prefix, keep "<compiler> ... -c file.c"
+                  local cc = line:match("([%w_/.+-]*c[cx+]*%s.-%s%-c%s.*)") or line:match("(%S*cc%s.*%s%-c%s.*)")
+                  local file = cc and cc:match("%s%-c%s+(%S+%.c)")
+                  if file then
+                    entries[#entries + 1] = { directory = root, file = file, command = cc }
+                  end
+                end
+              end
+              if #entries > 0 then
+                local dir = vim.fn.stdpath("cache") .. "/clangd/" .. vim.fn.sha256(root):sub(1, 12)
+                vim.fn.mkdir(dir, "p")
+                vim.fn.writefile({ vim.json.encode(entries) }, dir .. "/compile_commands.json")
+                table.insert(cmd, "--compile-commands-dir=" .. dir)
+              end
+            end
+            return vim.lsp.rpc.start(cmd, dispatchers)
+          end,
         },
         kotlin_language_server = {},
         bashls = {},
