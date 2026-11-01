@@ -77,3 +77,9 @@ autocmd("FileType", {
     end, { buffer = true, silent = true })
   end,
 })
+
+-- Treat *.m4 as autoconf
+vim.filetype.add({
+  filename = { ["config.m4"] = "config" }, -- PHP-extension/autoconf fragments
+  extension = { m4 = "config" }, -- or every *.m4 file
+})
