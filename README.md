@@ -17,7 +17,7 @@ My Neovim configuration.
 - Treesitter syntax highlighting
 - nvim-cmp completion
 - Copilot support
-- Markdown live preview in browser
+- In-buffer Markdown rendering
 
 ## Installation
 
@@ -233,7 +233,7 @@ All other settings work identically on macOS and Linux.
 - `,tc` - Close tab
 
 ### Markdown
-- `,mp` - Toggle Markdown preview (opens in browser)
+- `:RenderMarkdown toggle` - Toggle in-buffer Markdown rendering (render-markdown.nvim, on by default for `*.md`)
 
 ## Useful Commands
 

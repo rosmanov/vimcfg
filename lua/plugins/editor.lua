@@ -86,6 +86,14 @@ return {
     end,
   },
 
+  -- Render Markdown in-buffer
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    ft = "markdown",
+    opts = {},
+  },
+
   -- Tagbar alternative
   {
     "stevearc/aerial.nvim",

@@ -66,3 +66,8 @@ map("n", "<leader>cq", "<cmd>copen<CR>", opts) -- Reopen quickfix list
 
 -- Clear search highlighting
 map("n", "<Esc>", ":noh<CR>", opts)
+
+--
+map("n", "<leader>td", function()
+  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+end, { desc = "Toggle diagnostics" })
