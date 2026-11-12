@@ -19,13 +19,6 @@ return {
     end,
   },
 
-  -- Comments (replaces nerdcommenter)
-  {
-    "numToStr/Comment.nvim",
-    event = "VeryLazy",
-    config = true,
-  },
-
   -- Todo comments
   {
     "folke/todo-comments.nvim",
